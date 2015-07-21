@@ -1,6 +1,6 @@
 # tencentyun-youtu
 
-c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
+c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html) & [腾讯优图开放平台](open.youtu.qq.com)
 
 ## 安装
 ####运行环境
@@ -30,10 +30,11 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 
 ## 名词
 
-- `AppId` 平台添加应用后分配的AppId
+- `AppId` 平台用后分配的AppId
 - `SecretId` 平台添加应用后分配的SecretId
 - `SecretKey` 平台添加应用后分配的SecretKey
 - `签名` 接口鉴权凭证，由AppId、SecretId、SecretKey等生成，详见<http://open.youtu.qq.com/welcome/authentication>
+
 
 ## 使用示例
 ```
@@ -195,7 +196,7 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 - 接口
 `int GetFaceInfo(const std::string&face_id , std::string &rsp);`
 - 参数
-	- `face_id` 待查询的人脸id
+	- `face_id` 待查询的个体id
 	- `rsp` 返回的人脸信息查询结果，JSON字符串，字段参见API文档
 
 ```
