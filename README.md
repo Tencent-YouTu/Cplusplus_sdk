@@ -203,13 +203,4 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 ```
 更多详情和文档说明参见
 [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
-[腾讯优图开放平台](open.youtu.qq.com)const std::string&face_id , std::string &rsp);`
-- 参数
-	- `face_id` 待查询的个体id
-	- `rsp` 返回的人脸信息查询结果，JSON字符串，字段参见API文档
-
-```
-```
-更多详情和文档说明参见
-[腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 [腾讯优图开放平台](open.youtu.qq.com)
