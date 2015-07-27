@@ -85,7 +85,7 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 - 接口
 `int DetectFace(const std::string& imageData, bool isBigFace, std::string &rsp);`
 - 参数
-	- `imageData` 待检测的图片数据，base64编码
+	- `imageData` 待检测的图片数据
 	- `isBigFace` 是否大脸模式
 	- `rsp` 返回的检测结果，JSON字符串，字段参见API文档
 
@@ -93,7 +93,7 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 - 接口
 `int FaceShape(const std::string& imageData, bool isBigFace, std::string &rsp);`
 - 参数
-	- `imageData` 待检测的图片数据，base64编码
+	- `imageData` 待检测的图片数据
 	- `isBigFace` 是否大脸模式
 	- `rsp` 返回的配准结果，JSON字符串，字段参见API文档
 
@@ -101,8 +101,8 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 - 接口
 `int FaceCompare(const std::string& imageA, const std::string&imageB, std::string &rsp);`
 - 参数
-	- `imageA` 待比对的A图片数据，base64编码
-	- `imageB` 待比对的B图片数据，base64编码
+	- `imageA` 待比对的A图片数据
+	- `imageB` 待比对的B图片数据
 	- `rsp` 返回的比对结果，JSON字符串，字段参见API文档
 
 ###人脸验证
@@ -110,7 +110,7 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 `int FaceVerify(const std::string& person_id, const std::string& imageData, std::string &rsp);`
 - 参数
 	- `person_id` 待验证的人脸id
-	- `imageData` 待验证的图片数据，base64编码
+	- `imageData` 待验证的图片数据
 	- `rsp` 返回的人脸验证匹配结果，JSON字符串，字段参见API文档
 
 ###人脸识别
@@ -118,7 +118,7 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 `int FaceIdentify(const std::string& group_id, const std::string& imageData, std::string &rsp);`
 - 参数
 	- `group_id` 识别的组id
-	- `imageData` 待识别的图片数据，base64编码
+	- `imageData` 待识别的图片数据
 	- `rsp` 返回的top5识别结果，JSON字符串，字段参见API文档
 
 ###新建个体
@@ -126,9 +126,9 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
         `int NewPerson(const std::string& person_id, const std::string &person_name, const std::vector<std::string> &group_ids, const std::string& imageData, const std::string &tag, std::string &rsp);`
 - 参数
 	- `person_id` 新建的个体id，用户指定，需要保证app_id下的唯一性
-	- `person_name` 待验证的图片数据，base64编码
+	- `person_name` 待验证的图片数据
 	- `group_ids` 新建的个体存放的组id，可以指定多个组id，用户指定（组默认创建）
-	- `imageData` 包含个体人脸的图片数据，base64编码
+	- `imageData` 包含个体人脸的图片数据
 	- `tag` 备注信息，用户自解释字段
 	- `rsp` 返回的新建状态结果，JSON字符串，字段参见API文档
 
@@ -144,7 +144,7 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 `int AddFace(const std::string& person_id, const std::vector<std::string>& imageDatas, const std::string &tag, std::string &rsp);`
 - 参数
 	- `person_id` 新增人脸的个体身份id
-	- `imageDatas` 待增加的包含人脸的图片数据，可加入多张（包体大小<2m），base64编码
+	- `imageDatas` 待增加的包含人脸的图片数据，可加入多张（包体大小<2m）
 	-  `tag` 人脸备注信息，用户自解释字段
 	- `rsp` 返回的人脸增加状态结果，JSON字符串，字段参见API文档
 
@@ -195,6 +195,15 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 ###获取人脸信息
 - 接口
 `int GetFaceInfo(const std::string&face_id , std::string &rsp);`
+- 参数
+	- `face_id` 待查询的人脸id
+	- `rsp` 返回的人脸信息查询结果，JSON字符串，字段参见API文档
+
+```
+```
+更多详情和文档说明参见
+[腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
+[腾讯优图开放平台](open.youtu.qq.com)const std::string&face_id , std::string &rsp);`
 - 参数
 	- `face_id` 待查询的个体id
 	- `rsp` 返回的人脸信息查询结果，JSON字符串，字段参见API文档
