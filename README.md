@@ -126,7 +126,7 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
         `int NewPerson(const std::string& person_id, const std::string &person_name, const std::vector<std::string> &group_ids, const std::string& imageData, const std::string &tag, std::string &rsp);`
 - 参数
 	- `person_id` 新建的个体id，用户指定，需要保证app_id下的唯一性
-	- `person_name` 待验证的图片数据
+	- `person_name` 新建的个体名称
 	- `group_ids` 新建的个体存放的组id，可以指定多个组id，用户指定（组默认创建）
 	- `imageData` 包含个体人脸的图片数据
 	- `tag` 备注信息，用户自解释字段

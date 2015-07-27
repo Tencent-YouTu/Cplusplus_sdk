@@ -24,7 +24,7 @@ class ytopen_sdk
 
         /**
          * @brief DetectFace
-         * @param imageData 待检测的图片数据，base64编码
+         * @param imageData 待检测的图片数据
          * @param isBigFace 是否大脸模式
          * @param rsp 返回的检测结果，JSON字符串，字段参见API文档
          * @return 0成功 -1失败
@@ -34,7 +34,7 @@ class ytopen_sdk
 
         /**
          * @brief FaceShape
-         * @param imageData 待检测的图片数据，base64编码
+         * @param imageData 待检测的图片数据
          * @param isBigFace 是否大脸模式
          * @param rsp 返回的检测结果，JSON字符串，字段参见API文档
          * @return 0成功 -1失败
@@ -44,8 +44,8 @@ class ytopen_sdk
 
         /**
          * @brief FaceCompare
-         * @param imageA 待比对的A图片数据，base64编码
-         * @param imageB 待比对的B图片数据，base64编码
+         * @param imageA 待比对的A图片数据
+         * @param imageB 待比对的B图片数据
          * @param rsp 返回的比对结果，JSON字符串，字段参见API文档
          * @return
          */
@@ -55,7 +55,7 @@ class ytopen_sdk
         /**
          * @brief FaceVerify
          * @param person_id 待验证的人脸id
-         * @param imageData 待验证的图片数据，base64编码
+         * @param imageData 待验证的图片数据
          * @param rsp 返回的人脸验证匹配结果，JSON字符串，字段参见API文档
          * @return 0成功 -1失败
          */
@@ -65,7 +65,7 @@ class ytopen_sdk
         /**
          * @brief FaceIdentify
          * @param group_id 识别的组id
-         * @param imageData 待识别的图片数据，base64编码
+         * @param imageData 待识别的图片数据
          * @param rsp 返回的top5识别结果，JSON字符串，字段参见API文档
          * @return 0成功 -1失败
          */
@@ -75,9 +75,9 @@ class ytopen_sdk
         /**
          * @brief NewPerson
          * @param person_id 新建的个体id，用户指定，需要保证app_id下的唯一性
-         * @param person_name 待验证的图片数据，base64编码
+         * @param person_name 待验证的图片数据
          * @param group_ids 新建的个体存放的组id，可以指定多个组id，用户指定（组默认创建）
-         * @param imageData 包含个体人脸的图片数据，base64编码
+         * @param imageData 包含个体人脸的图片数据
          * @param tag 备注信息，用户自解释字段
          * @param rsp 返回的新建状态结果，JSON字符串，字段参见API文档
          * @return 0成功 -1失败
@@ -97,7 +97,7 @@ class ytopen_sdk
         /**
          * @brief AddFace
          * @param person_id 新增人脸的个体身份id
-         * @param imageDatas 待增加的包含人脸的图片数据，可加入多张（包体大小<2m），base64编码
+         * @param imageDatas 待增加的包含人脸的图片数据，可加入多张（包体大小<2m）
          * @param tag 人脸备注信息，用户自解释字段
          * @param rsp 返回的人脸增加状态结果，JSON字符串，字段参见API文档
          * @return 0成功 -1失败
