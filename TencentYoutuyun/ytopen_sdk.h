@@ -2,6 +2,15 @@
 #define _YTOPEN_SDK_
 #include <string>
 #include <vector>
+#include <sstream>
+#include <iostream>
+#include <stdlib.h>
+#include <curl/curl.h>
+#include "rapidjson/writer.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/document.h"
+#include "bin2ascii.h"
+#include "sign/include/qcloud_sign.h"
 
 class ytopen_sdk
 {
@@ -14,12 +23,18 @@ class ytopen_sdk
             std::string user_id;
         }AppSign;
 
+        enum Domain
+        {
+            API_YOUTU_END_POINT = 0,
+            API_TENCENTYUN_END_POINT = 1
+        };
+
     public:
         /**
          * @brief Init
          * @param t_app_sign 密钥身份信息
          */
-        void Init(const AppSign& t_app_sign);
+        void Init(const AppSign& t_app_sign, Domain domain = API_YOUTU_END_POINT);
 
 
         /**
@@ -29,7 +44,7 @@ class ytopen_sdk
          * @param rsp 返回的检测结果，JSON字符串，字段参见API文档
          * @return 0成功 -1失败
          */
-        int DetectFace(const std::string& imageData, bool isBigFace, std::string &rsp);
+        int DetectFace(rapidjson::Value &result, const std::string& imagePath, int data_type = 0, bool isBigFace = false);
 
 
         /**
@@ -39,7 +54,7 @@ class ytopen_sdk
          * @param rsp 返回的检测结果，JSON字符串，字段参见API文档
          * @return 0成功 -1失败
          */
-        int FaceShape(const std::string& imageData, bool isBigFace, std::string &rsp);
+        int FaceShape(rapidjson::Value &result, const std::string& imagePath, int data_type = 0, bool isBigFace = false);
 
 
         /**
@@ -49,7 +64,7 @@ class ytopen_sdk
          * @param rsp 返回的比对结果，JSON字符串，字段参见API文档
          * @return
          */
-        int FaceCompare(const std::string& imageA, const std::string&imageB, std::string &rsp);
+        int FaceCompare(rapidjson::Value &result, const std::string& imagePathA, const std::string&imagePathB, int data_type = 0);
 
 
         /**
@@ -59,7 +74,7 @@ class ytopen_sdk
          * @param rsp 返回的人脸验证匹配结果，JSON字符串，字段参见API文档
          * @return 0成功 -1失败
          */
-        int FaceVerify(const std::string& person_id, const std::string& imageData, std::string &rsp);
+        int FaceVerify(rapidjson::Value &result, const std::string& person_id, const std::string& imagePath, int data_type = 0);
 
 
         /**
@@ -69,7 +84,7 @@ class ytopen_sdk
          * @param rsp 返回的top5识别结果，JSON字符串，字段参见API文档
          * @return 0成功 -1失败
          */
-        int FaceIdentify(const std::string& group_id, const std::string& imageData, std::string &rsp);
+        int FaceIdentify(rapidjson::Value &result, const std::string& group_id, const std::string& imagePath, int data_type = 0);
 
 
         /**
@@ -82,7 +97,7 @@ class ytopen_sdk
          * @param rsp 返回的新建状态结果，JSON字符串，字段参见API文档
          * @return 0成功 -1失败
          */
-        int NewPerson(const std::string& person_id, const std::string &person_name, const std::vector<std::string> &group_ids, const std::string& imageData, const std::string &tag, std::string &rsp);
+        int NewPerson(rapidjson::Value &result, const std::string& person_id, const std::string &person_name, const std::vector<std::string> &group_ids, const std::string& imagePath, int data_type = 0, const std::string &tag = "");
 
 
         /**
@@ -91,7 +106,7 @@ class ytopen_sdk
          * @param rsp 返回的删除状态结果，JSON字符串，字段参见API文档
          * @return 0成功 -1失败
          */
-        int DelPerson(const std::string& person_id, std::string &rsp);
+        int DelPerson(rapidjson::Value &result, const std::string& person_id);
 
 
         /**
@@ -102,7 +117,7 @@ class ytopen_sdk
          * @param rsp 返回的人脸增加状态结果，JSON字符串，字段参见API文档
          * @return 0成功 -1失败
          */
-        int AddFace(const std::string& person_id, const std::vector<std::string>& imageDatas, const std::string &tag, std::string &rsp);
+        int AddFace(rapidjson::Value &result, const std::string& person_id, const std::vector<std::string>& imagePaths, int data_type = 0, const std::string &tag="");
 
 
         /**
@@ -112,7 +127,7 @@ class ytopen_sdk
          * @param rsp 返回的人脸删除状态结果，JSON字符串，字段参见API文档
          * @return 0成功 -1失败
          */
-        int DelFace(const std::string& person_id, const std::vector<std::string>& face_ids, std::string &rsp);
+        int DelFace(rapidjson::Value &result, const std::string& person_id, const std::vector<std::string>& face_ids);
 
 
         /**
@@ -123,7 +138,7 @@ class ytopen_sdk
          * @param rsp 返回的状态结果，JSON字符串，字段参见API文档
          * @return 0成功 -1失败
          */
-        int SetInfo(const std::string& person_id, const std::string& person_name, const std::string& tag, std::string &rsp);
+        int SetInfo(rapidjson::Value &result, const std::string& person_id, const std::string& person_name, const std::string& tag);
 
 
         /**
@@ -132,7 +147,7 @@ class ytopen_sdk
          * @param rsp 返回的查询结果，JSON字符串，字段参见API文档
          * @return 0成功 -1失败
          */
-        int GetInfo(const std::string& person_id, std::string &rsp);
+        int GetInfo(rapidjson::Value &result, const std::string& person_id);
 
 
         /**
@@ -140,7 +155,7 @@ class ytopen_sdk
          * @param rsp 返回的组列表查询结果，JSON字符串，字段参见API文档
          * @return 0成功 -1失败
          */
-        int GetGroupIds(std::string &rsp);
+        int GetGroupIds(rapidjson::Value &result);
 
 
         /**
@@ -149,7 +164,7 @@ class ytopen_sdk
          * @param rsp 返回的个体列表查询结果，JSON字符串，字段参见API文档
          * @return 0成功 -1失败
          */
-        int GetPersonIds(const std::string& group_id, std::string &rsp);
+        int GetPersonIds(rapidjson::Value &result, const std::string& group_id);
 
 
         /**
@@ -158,7 +173,7 @@ class ytopen_sdk
          * @param rsp 返回的人脸列表查询结果，JSON字符串，字段参见API文档
          * @return 0成功 -1失败
          */
-        int GetFaceIds(const std::string& person_id, std::string &rsp);
+        int GetFaceIds(rapidjson::Value &result, const std::string& person_id);
 
 
         /**
@@ -167,13 +182,15 @@ class ytopen_sdk
          * @param rsp 返回的人脸信息查询结果，JSON字符串，字段参见API文档
          * @return 0成功 -1失败
          */
-        int GetFaceInfo(const std::string&face_id , std::string &rsp);
+        int GetFaceInfo(rapidjson::Value &result, const std::string&face_id);
 
     private:
         int curl_method(const std::string& addr, const std::string &req_str, std::string &rsp_str);
         
     private:
-        static std::string host;
+        static std::string host_tencentyun;
+        static std::string host_youtu;
+        std::string host;
         AppSign app_sign;
         std::string app_id;
 };

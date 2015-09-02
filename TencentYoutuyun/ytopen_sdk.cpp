@@ -1,44 +1,130 @@
-#include <sstream>
-#include <iostream>
-#include <stdlib.h>
-#include <curl/curl.h>
-#include "rapidjson/writer.h"
-#include "rapidjson/stringbuffer.h"
-#include "bin2ascii.h"
-#include "sign/include/qcloud_sign.h"
 #include "ytopen_sdk.h"
 
 using namespace std;
 using namespace rapidjson;
 
-string ytopen_sdk::host = "api.youtu.qq.com";
+string ytopen_sdk::host_youtu = "http://api.youtu.qq.com";
+string ytopen_sdk::host_tencentyun = "https://youtu.api.qcloud.com";
 
-void ytopen_sdk::Init(const AppSign& t_app_sign)
+int read_image(string filesrc,std::string& data)
+{
+    std::ifstream fr;
+    fr.open(filesrc.c_str(),ios::binary);
+
+    if (!fr)
+    {
+        std::cout<<"can't find left_file :"<<filesrc<<std::endl;
+        return -1;
+    }
+
+    fr.seekg(0,ios::end);
+    int length = fr.tellg();
+    fr.seekg(0,ios::beg);
+    char * image_data=new char[length];
+    fr.read(image_data,length);
+    fr.close();
+    std::cout<<"image_data length is:"<<length<<std::endl;
+
+    data.assign(image_data, length);
+    return 0;
+}
+
+void ytopen_sdk::Init(const AppSign& t_app_sign, Domain domain)
 {
     app_sign = t_app_sign;
 
     char t_app_id[64];
     snprintf(t_app_id, 63, "%d", t_app_sign.app_id);
     app_id.assign(t_app_id);
+
+    if(domain == API_YOUTU_END_POINT) {
+        host = host_youtu;
+    }else {
+        host = host_tencentyun;
+    }
 }
 
-int ytopen_sdk::DetectFace(const string& imageData, bool isBigFace, string &rsp)
+int ytopen_sdk::DetectFace(rapidjson::Value &result, const string& imagePath, int data_type, bool isBigFace)
 {
+    string imageData;
+    if(data_type == 0 && 0 != read_image(imagePath, imageData)) {
+        cout << "image not exist " << imagePath << endl;
+        return -1;
+    }
+
     std::stringstream ss;
-    ss<<"http://"<<host<<"/youtu/api/detectface";
+    ss<<host<<"/youtu/api/detectface";
 
     string addr;
     addr.assign(ss.str());
 
     string req;
+    string rsp;
 
     StringBuffer sbuffer;
     Writer<StringBuffer> writer(sbuffer);
 
     writer.StartObject();
     writer.String("app_id"); writer.String(app_id.c_str());
-    string encode_data = b64_encode(imageData);
-    writer.String("image"); writer.String(encode_data.c_str());
+    if(data_type == 0) {
+        string encode_data = b64_encode(imageData);
+        writer.String("image"); writer.String(encode_data.c_str());
+    }else {
+        writer.String("url"); writer.String(imageData.c_str());
+        writer.String("data_type"); writer.Uint(1);
+    }
+    writer.String("mode"); writer.Uint(isBigFace);
+
+    writer.EndObject();
+
+    req = sbuffer.GetString();
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        rapidjson::Document d;
+        d.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(d.HasParseError()) {
+            std::cout << "RapidJson parse error " << d.GetParseError() << endl;
+            return -1;
+        }
+
+        rapidjson::Value::AllocatorType allocator;
+        result.CopyFrom(d, allocator);
+    }else {
+        return -1;
+    }
+
+    return 0;
+}
+
+int ytopen_sdk::FaceShape(rapidjson::Value &result, const string& imagePath, int data_type, bool isBigFace)
+{
+    string imageData;
+    if(data_type == 0 && 0 != read_image(imagePath, imageData)) {
+        cout << "image not exist " << imagePath << endl;
+        return -1;
+    }
+
+    std::stringstream ss;
+    ss<<host<<"/youtu/api/faceshape";
+
+    string addr;
+    addr.assign(ss.str());
+
+    string req;
+    string rsp;
+
+    StringBuffer sbuffer;
+    Writer<StringBuffer> writer(sbuffer);
+
+    writer.StartObject();
+    writer.String("app_id"); writer.String(app_id.c_str());
+    if(data_type == 0) {
+        string encode_data = b64_encode(imageData);
+        writer.String("image"); writer.String(encode_data.c_str());
+    }else {
+        writer.String("url"); writer.String(imageData.c_str());
+        writer.String("data_type"); writer.Int(1);
+    }
     writer.String("mode"); writer.Uint(isBigFace);
 
     writer.EndObject();
@@ -47,73 +133,91 @@ int ytopen_sdk::DetectFace(const string& imageData, bool isBigFace, string &rsp)
     return curl_method(addr, req, rsp);
 }
 
-int ytopen_sdk::FaceShape(const string& imageData, bool isBigFace, string &rsp)
+int ytopen_sdk::FaceCompare(rapidjson::Value &result, const string& imagePathA, const string&imagePathB, int data_type)
 {
+    result.SetNull();
+
+    string imageA, imageB;
+    if(data_type == 0 &&
+         (0 != read_image(imagePathA, imageA) || 0 != read_image(imagePathB, imageB))) {
+        cout << "image not exist " << imagePathA << "," << imagePathB << endl;
+        return -1;
+    }
+
     std::stringstream ss;
-    ss<<"http://"<<host<<"/youtu/api/faceshape";
+    ss<<host<<"/youtu/api/facecompare";
 
     string addr;
     addr.assign(ss.str());
 
     string req;
+    string rsp;
 
     StringBuffer sbuffer;
     Writer<StringBuffer> writer(sbuffer);
 
     writer.StartObject();
     writer.String("app_id"); writer.String(app_id.c_str());
-    string encode_data = b64_encode(imageData);
-    writer.String("image"); writer.String(encode_data.c_str());
-    writer.String("mode"); writer.Uint(isBigFace);
-
+    if(data_type == 0) {
+        string encode_data = b64_encode(imageA);
+        writer.String("imageA"); writer.String(encode_data.c_str());
+        encode_data = b64_encode(imageB);
+        writer.String("imageB"); writer.String(encode_data.c_str());
+    }else {
+        writer.String("urlA"); writer.String(imagePathA.c_str());
+        writer.String("urlB"); writer.String(imagePathB.c_str());
+        writer.String("data_type"); writer.Int(1);
+    }
     writer.EndObject();
 
     req = sbuffer.GetString();
-    return curl_method(addr, req, rsp);
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        rapidjson::Document d;
+        d.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(d.HasParseError()) {
+            std::cout << "RapidJson parse error " << d.GetParseError() << endl;
+            return -1;
+        }
+
+        rapidjson::Value::AllocatorType allocator;
+        result.CopyFrom(d, allocator);
+    }else {
+        return -1;
+    }
+
+    return 0;
 }
 
-int ytopen_sdk::FaceCompare(const string& imageA, const string&imageB, string &rsp)
+int ytopen_sdk::FaceVerify(rapidjson::Value &result, const string& person_id, const string& imagePath, int data_type)
 {
+    string imageData;
+    if(data_type == 0 && 0 != read_image(imagePath, imageData)) {
+        cout << "image not exist " << imagePath << endl;
+        return -1;
+    }
+
     std::stringstream ss;
-    ss<<"http://"<<host<<"/youtu/api/facecompare";
+    ss<<host<<"/youtu/api/faceverify";
 
     string addr;
     addr.assign(ss.str());
 
     string req;
+    string rsp;
 
     StringBuffer sbuffer;
     Writer<StringBuffer> writer(sbuffer);
 
     writer.StartObject();
     writer.String("app_id"); writer.String(app_id.c_str());
-    string encode_data = b64_encode(imageA);
-    writer.String("imageA"); writer.String(encode_data.c_str());
-    encode_data = b64_encode(imageB);
-    writer.String("imageB"); writer.String(encode_data.c_str());
-    writer.EndObject();
-
-    req = sbuffer.GetString();
-    return curl_method(addr, req, rsp);
-}
-
-int ytopen_sdk::FaceVerify(const string& person_id, const string& imageData, string &rsp)
-{
-    std::stringstream ss;
-    ss<<"http://"<<host<<"/youtu/api/faceverify";
-
-    string addr;
-    addr.assign(ss.str());
-
-    string req;
-
-    StringBuffer sbuffer;
-    Writer<StringBuffer> writer(sbuffer);
-
-    writer.StartObject();
-    writer.String("app_id"); writer.String(app_id.c_str());
-    string encode_data = b64_encode(imageData);
-    writer.String("image"); writer.String(encode_data.c_str());
+    if(data_type == 0) {
+        string encode_data = b64_encode(imageData);
+        writer.String("image"); writer.String(encode_data.c_str());
+    }else {
+        writer.String("url"); writer.String(imageData.c_str());
+        writer.String("data_type"); writer.Int(1);
+    }
     writer.String("person_id"); writer.String(person_id.c_str());
     writer.EndObject();
 
@@ -121,23 +225,35 @@ int ytopen_sdk::FaceVerify(const string& person_id, const string& imageData, str
     return curl_method(addr, req, rsp);
 }
 
-int ytopen_sdk::FaceIdentify(const string& group_id, const string& imageData, string &rsp)
+int ytopen_sdk::FaceIdentify(rapidjson::Value &result, const string& group_id, const string& imagePath, int data_type)
 {
+    string imageData;
+    if(data_type == 0 && 0 != read_image(imagePath, imageData)) {
+        cout << "image not exist " << imagePath << endl;
+        return -1;
+    }
+
     std::stringstream ss;
-    ss<<"http://"<<host<<"/youtu/api/faceidentify";
+    ss<<host<<"/youtu/api/faceidentify";
 
     string addr;
     addr.assign(ss.str());
 
     string req;
+    string rsp;
 
     StringBuffer sbuffer;
     Writer<StringBuffer> writer(sbuffer);
 
     writer.StartObject();
     writer.String("app_id"); writer.String(app_id.c_str());
-    string encode_data = b64_encode(imageData);
-    writer.String("image"); writer.String(encode_data.c_str());
+    if(data_type == 0) {
+        string encode_data = b64_encode(imageData);
+        writer.String("image"); writer.String(encode_data.c_str());
+    }else {
+        writer.String("url"); writer.String(imageData.c_str());
+        writer.String("data_type"); writer.Int(1);
+    }
     writer.String("group_id"); writer.String(group_id.c_str());
     writer.EndObject();
 
@@ -145,23 +261,35 @@ int ytopen_sdk::FaceIdentify(const string& group_id, const string& imageData, st
     return curl_method(addr, req, rsp);
 }
 
-int ytopen_sdk::NewPerson(const string& person_id, const string &person_name, const std::vector<string> &group_ids, const string& imageData, const string &tag, string &rsp)
+int ytopen_sdk::NewPerson(rapidjson::Value &result, const string& person_id, const string &person_name, const std::vector<string> &group_ids, const string& imagePath, int data_type, const string &tag)
 {
+    string imageData;
+    if(data_type == 0 && 0 != read_image(imagePath, imageData)) {
+        cout << "image not exist " << imagePath << endl;
+        return -1;
+    }
+
     std::stringstream ss;
-    ss<<"http://"<<host<<"/youtu/api/newperson";
+    ss<<host<<"/youtu/api/newperson";
 
     string addr;
     addr.assign(ss.str());
 
     string req;
+    string rsp;
 
     StringBuffer sbuffer;
     Writer<StringBuffer> writer(sbuffer);
 
     writer.StartObject();
     writer.String("app_id"); writer.String(app_id.c_str());
-    string encode_data = b64_encode(imageData);
-    writer.String("image"); writer.String(encode_data.c_str());
+    if(data_type == 0) {
+        string encode_data = b64_encode(imageData);
+        writer.String("image"); writer.String(encode_data.c_str());
+    }else {
+        writer.String("url"); writer.String(imageData.c_str());
+        writer.String("data_type"); writer.Int(1);
+    }
     writer.String("person_id"); writer.String(person_id.c_str());
     writer.String("person_name"); writer.String(person_name.c_str());
     writer.String("group_ids");
@@ -176,15 +304,16 @@ int ytopen_sdk::NewPerson(const string& person_id, const string &person_name, co
     return curl_method(addr, req, rsp);
 }
 
-int ytopen_sdk::DelPerson(const string& person_id, string &rsp)
+int ytopen_sdk::DelPerson(rapidjson::Value &result, const string& person_id)
 {
     std::stringstream ss;
-    ss<<"http://"<<host<<"/youtu/api/delperson";
+    ss<<host<<"/youtu/api/delperson";
 
     string addr;
     addr.assign(ss.str());
 
     string req;
+    string rsp;
 
     StringBuffer sbuffer;
     Writer<StringBuffer> writer(sbuffer);
@@ -198,29 +327,51 @@ int ytopen_sdk::DelPerson(const string& person_id, string &rsp)
     return curl_method(addr, req, rsp);
 }
 
-int ytopen_sdk::AddFace(const string& person_id, const std::vector<string>& imageDatas, const string &tag, string &rsp)
+int ytopen_sdk::AddFace(rapidjson::Value &result, const string& person_id, const std::vector<string>& imagePaths, int data_type, const string &tag)
 {
     std::stringstream ss;
-    ss<<"http://"<<host<<"/youtu/api/addface";
+    ss<<host<<"/youtu/api/addface";
 
     string addr;
     addr.assign(ss.str());
 
     string req;
+    string rsp;
+    string imageData;
 
     StringBuffer sbuffer;
     Writer<StringBuffer> writer(sbuffer);
 
     writer.StartObject();
     writer.String("app_id"); writer.String(app_id.c_str());
-    writer.String("images");
-    writer.StartArray();
-    for(int i = 0; i < imageDatas.size(); i++)
-    {
-        string encode_data = b64_encode(imageDatas[i]);
-        writer.String(encode_data.c_str());
+    if(data_type == 0) {
+        writer.String("images");
+        writer.StartArray();
+        for(int i = 0; i < imagePaths.size(); i++)
+        {
+            if(0 != read_image(imagePaths[i], imageData)) {
+                cout << "read image failed " << imagePaths[i] << endl;
+                continue;
+            }
+            string encode_data = b64_encode(imageData);
+            writer.String(encode_data.c_str());
+        }
+        writer.EndArray();
+
+    }else {
+        writer.String("urls");
+        writer.StartArray();
+        for(int i = 0; i < imagePaths.size(); i++)
+        {
+            if(!imagePaths[i].empty()) {
+                writer.String(imagePaths[i].c_str());
+            }else {
+                cout << "url empty." <<endl;
+            }
+        }
+        writer.EndArray();
     }
-    writer.EndArray();
+    writer.String("data_type"); writer.Int(data_type);
     writer.String("person_id"); writer.String(person_id.c_str());
     writer.String("tag"); writer.String(tag.c_str());
     writer.EndObject();
@@ -229,15 +380,16 @@ int ytopen_sdk::AddFace(const string& person_id, const std::vector<string>& imag
     return curl_method(addr, req, rsp);
 }
 
-int ytopen_sdk::DelFace(const string& person_id, const std::vector<string>& face_ids, string &rsp)
+int ytopen_sdk::DelFace(rapidjson::Value &result, const string& person_id, const std::vector<string>& face_ids)
 {
     std::stringstream ss;
-    ss<<"http://"<<host<<"/youtu/api/delface";
+    ss<<host<<"/youtu/api/delface";
 
     string addr;
     addr.assign(ss.str());
 
     string req;
+    string rsp;
 
     StringBuffer sbuffer;
     Writer<StringBuffer> writer(sbuffer);
@@ -257,15 +409,16 @@ int ytopen_sdk::DelFace(const string& person_id, const std::vector<string>& face
     return curl_method(addr, req, rsp);
 }
 
-int ytopen_sdk::SetInfo(const string& person_id, const string& person_name, const string& tag, string &rsp)
+int ytopen_sdk::SetInfo(rapidjson::Value &result, const string& person_id, const string& person_name, const string& tag)
 {
     std::stringstream ss;
-    ss<<"http://"<<host<<"/youtu/api/setinfo";
+    ss<<host<<"/youtu/api/setinfo";
 
     string addr;
     addr.assign(ss.str());
 
     string req;
+    string rsp;
 
     StringBuffer sbuffer;
     Writer<StringBuffer> writer(sbuffer);
@@ -281,15 +434,16 @@ int ytopen_sdk::SetInfo(const string& person_id, const string& person_name, cons
     return curl_method(addr, req, rsp);
 }
 
-int ytopen_sdk::GetInfo(const string& person_id, string &rsp)
+int ytopen_sdk::GetInfo(rapidjson::Value &result, const string& person_id)
 {
     std::stringstream ss;
-    ss<<"http://"<<host<<"/youtu/api/getinfo";
+    ss<<host<<"/youtu/api/getinfo";
 
     string addr;
     addr.assign(ss.str());
 
     string req;
+    string rsp;
 
     StringBuffer sbuffer;
     Writer<StringBuffer> writer(sbuffer);
@@ -303,15 +457,16 @@ int ytopen_sdk::GetInfo(const string& person_id, string &rsp)
     return curl_method(addr, req, rsp);
 }
 
-int ytopen_sdk::GetGroupIds(string &rsp)
+int ytopen_sdk::GetGroupIds(rapidjson::Value &result)
 {
     std::stringstream ss;
-    ss<<"http://"<<host<<"/youtu/api/getgroupids";
+    ss<<host<<"/youtu/api/getgroupids";
 
     string addr;
     addr.assign(ss.str());
 
     string req;
+    string rsp;
 
     StringBuffer sbuffer;
     Writer<StringBuffer> writer(sbuffer);
@@ -324,15 +479,16 @@ int ytopen_sdk::GetGroupIds(string &rsp)
     return curl_method(addr, req, rsp);
 }
 
-int ytopen_sdk::GetPersonIds(const string& group_id, string &rsp)
+int ytopen_sdk::GetPersonIds(rapidjson::Value &result, const string& group_id)
 {
     std::stringstream ss;
-    ss<<"http://"<<host<<"/youtu/api/getpersonids";
+    ss<<host<<"/youtu/api/getpersonids";
 
     string addr;
     addr.assign(ss.str());
 
     string req;
+    string rsp;
 
     StringBuffer sbuffer;
     Writer<StringBuffer> writer(sbuffer);
@@ -346,15 +502,16 @@ int ytopen_sdk::GetPersonIds(const string& group_id, string &rsp)
     return curl_method(addr, req, rsp);
 }
 
-int ytopen_sdk::GetFaceIds(const string& person_id, string &rsp)
+int ytopen_sdk::GetFaceIds(rapidjson::Value &result, const string& person_id)
 {
     std::stringstream ss;
-    ss<<"http://"<<host<<"/youtu/api/getfaceids";
+    ss<<host<<"/youtu/api/getfaceids";
 
     string addr;
     addr.assign(ss.str());
 
     string req;
+    string rsp;
 
     StringBuffer sbuffer;
     Writer<StringBuffer> writer(sbuffer);
@@ -368,15 +525,16 @@ int ytopen_sdk::GetFaceIds(const string& person_id, string &rsp)
     return curl_method(addr, req, rsp);
 }
 
-int ytopen_sdk::GetFaceInfo(const string&face_id , string &rsp)
+int ytopen_sdk::GetFaceInfo(rapidjson::Value &result, const string&face_id)
 {
     std::stringstream ss;
-    ss<<"http://"<<host<<"/youtu/api/getfaceinfo";
+    ss<<host<<"/youtu/api/getfaceinfo";
 
     string addr;
     addr.assign(ss.str());
 
     string req;
+    string rsp;
 
     StringBuffer sbuffer;
     Writer<StringBuffer> writer(sbuffer);
@@ -398,7 +556,7 @@ int writer(char *data, size_t size, size_t nmemb, std::string *writerData)
      return len;
 }
 
-int ytopen_sdk:: curl_method(const string &addr, const string &req_str, string &rsp_str)
+int ytopen_sdk::curl_method(const string &addr, const string &req_str, string &rsp_str)
 {
     rsp_str.clear();
 
@@ -446,13 +604,15 @@ int ytopen_sdk:: curl_method(const string &addr, const string &req_str, string &
         res_code = curl_easy_perform(curl);
         if(CURLE_OK != res_code) {
             std::cout<<"res_code is "<<res_code<<std::endl;
+            curl_easy_cleanup(curl);
             return -1;
         }
 
         long http_code;
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
-        if(200 != http_code) {
-            std::cout << "http_code is "<<http_code<<std::endl;
+        if(http_code != 200) {
+            cout << "http_code is " << http_code << endl;
+            curl_easy_cleanup(curl);
             return -1;
         }
 
