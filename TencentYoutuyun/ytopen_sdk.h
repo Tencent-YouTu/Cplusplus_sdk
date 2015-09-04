@@ -182,7 +182,37 @@ class ytopen_sdk
          * @param rsp 返回的人脸信息查询结果，JSON字符串，字段参见API文档
          * @return 0成功 -1失败
          */
-        int GetFaceInfo(rapidjson::Value &result, const std::string&face_id);
+        int GetFaceInfo(rapidjson::Value &result, const std::string &face_id);
+
+        /**
+         * @brief FuzzyDetect
+         * @param result
+         * @param imagePath
+         * @param data_type
+         * @param cookie
+         * @return
+         */
+        int FuzzyDetect(rapidjson::Value &result, const std::string &imagePath, int data_type = 0, const std::string &cookie = "");
+
+        /**
+         * @brief FoodDetect
+         * @param result
+         * @param imagePath
+         * @param data_type
+         * @param cookie
+         * @return
+         */
+        int FoodDetect(rapidjson::Value &result, const std::string &imagePath, int data_type = 0, const std::string &cookie = "");
+
+        /**
+         * @brief ImageTag
+         * @param result
+         * @param imagePath
+         * @param data_type
+         * @param cookie
+         * @return
+         */
+        int ImageTag(rapidjson::Value &result, const std::string &imagePath, int data_type = 0, const std::string &cookie = "");
 
     private:
         int curl_method(const std::string& addr, const std::string &req_str, std::string &rsp_str);

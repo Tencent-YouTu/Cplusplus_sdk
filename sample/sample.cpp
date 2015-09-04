@@ -21,7 +21,7 @@ int main(int argc,char * argv[])
     m_sdk.Init(m_app_sign);
 
     rapidjson::Value result;
-    if(0 != m_sdk.DetectFace(result, "a.jpg", 0, true))
+    if(0 != m_sdk.DetectFace(result, "a.jpg"))
     {
         cout << "DetectFace failed." << endl;
     }

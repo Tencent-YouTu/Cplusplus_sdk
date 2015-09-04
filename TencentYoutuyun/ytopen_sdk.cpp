@@ -71,7 +71,6 @@ int ytopen_sdk::DetectFace(rapidjson::Value &result, const string& imagePath, in
         writer.String("image"); writer.String(encode_data.c_str());
     }else {
         writer.String("url"); writer.String(imageData.c_str());
-        writer.String("data_type"); writer.Uint(1);
     }
     writer.String("mode"); writer.Uint(isBigFace);
 
@@ -123,14 +122,28 @@ int ytopen_sdk::FaceShape(rapidjson::Value &result, const string& imagePath, int
         writer.String("image"); writer.String(encode_data.c_str());
     }else {
         writer.String("url"); writer.String(imageData.c_str());
-        writer.String("data_type"); writer.Int(1);
     }
     writer.String("mode"); writer.Uint(isBigFace);
 
     writer.EndObject();
 
     req = sbuffer.GetString();
-    return curl_method(addr, req, rsp);
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        rapidjson::Document d;
+        d.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(d.HasParseError()) {
+            std::cout << "RapidJson parse error " << d.GetParseError() << endl;
+            return -1;
+        }
+
+        rapidjson::Value::AllocatorType allocator;
+        result.CopyFrom(d, allocator);
+    }else {
+        return -1;
+    }
+
+    return 0;
 }
 
 int ytopen_sdk::FaceCompare(rapidjson::Value &result, const string& imagePathA, const string&imagePathB, int data_type)
@@ -166,7 +179,6 @@ int ytopen_sdk::FaceCompare(rapidjson::Value &result, const string& imagePathA, 
     }else {
         writer.String("urlA"); writer.String(imagePathA.c_str());
         writer.String("urlB"); writer.String(imagePathB.c_str());
-        writer.String("data_type"); writer.Int(1);
     }
     writer.EndObject();
 
@@ -216,13 +228,27 @@ int ytopen_sdk::FaceVerify(rapidjson::Value &result, const string& person_id, co
         writer.String("image"); writer.String(encode_data.c_str());
     }else {
         writer.String("url"); writer.String(imageData.c_str());
-        writer.String("data_type"); writer.Int(1);
     }
     writer.String("person_id"); writer.String(person_id.c_str());
     writer.EndObject();
 
     req = sbuffer.GetString();
-    return curl_method(addr, req, rsp);
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        rapidjson::Document d;
+        d.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(d.HasParseError()) {
+            std::cout << "RapidJson parse error " << d.GetParseError() << endl;
+            return -1;
+        }
+
+        rapidjson::Value::AllocatorType allocator;
+        result.CopyFrom(d, allocator);
+    }else {
+        return -1;
+    }
+
+    return 0;
 }
 
 int ytopen_sdk::FaceIdentify(rapidjson::Value &result, const string& group_id, const string& imagePath, int data_type)
@@ -252,13 +278,27 @@ int ytopen_sdk::FaceIdentify(rapidjson::Value &result, const string& group_id, c
         writer.String("image"); writer.String(encode_data.c_str());
     }else {
         writer.String("url"); writer.String(imageData.c_str());
-        writer.String("data_type"); writer.Int(1);
     }
     writer.String("group_id"); writer.String(group_id.c_str());
     writer.EndObject();
 
     req = sbuffer.GetString();
-    return curl_method(addr, req, rsp);
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        rapidjson::Document d;
+        d.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(d.HasParseError()) {
+            std::cout << "RapidJson parse error " << d.GetParseError() << endl;
+            return -1;
+        }
+
+        rapidjson::Value::AllocatorType allocator;
+        result.CopyFrom(d, allocator);
+    }else {
+        return -1;
+    }
+
+    return 0;
 }
 
 int ytopen_sdk::NewPerson(rapidjson::Value &result, const string& person_id, const string &person_name, const std::vector<string> &group_ids, const string& imagePath, int data_type, const string &tag)
@@ -288,7 +328,6 @@ int ytopen_sdk::NewPerson(rapidjson::Value &result, const string& person_id, con
         writer.String("image"); writer.String(encode_data.c_str());
     }else {
         writer.String("url"); writer.String(imageData.c_str());
-        writer.String("data_type"); writer.Int(1);
     }
     writer.String("person_id"); writer.String(person_id.c_str());
     writer.String("person_name"); writer.String(person_name.c_str());
@@ -301,7 +340,22 @@ int ytopen_sdk::NewPerson(rapidjson::Value &result, const string& person_id, con
     writer.EndObject();
 
     req = sbuffer.GetString();
-    return curl_method(addr, req, rsp);
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        rapidjson::Document d;
+        d.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(d.HasParseError()) {
+            std::cout << "RapidJson parse error " << d.GetParseError() << endl;
+            return -1;
+        }
+
+        rapidjson::Value::AllocatorType allocator;
+        result.CopyFrom(d, allocator);
+    }else {
+        return -1;
+    }
+
+    return 0;
 }
 
 int ytopen_sdk::DelPerson(rapidjson::Value &result, const string& person_id)
@@ -324,7 +378,22 @@ int ytopen_sdk::DelPerson(rapidjson::Value &result, const string& person_id)
     writer.EndObject();
 
     req = sbuffer.GetString();
-    return curl_method(addr, req, rsp);
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        rapidjson::Document d;
+        d.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(d.HasParseError()) {
+            std::cout << "RapidJson parse error " << d.GetParseError() << endl;
+            return -1;
+        }
+
+        rapidjson::Value::AllocatorType allocator;
+        result.CopyFrom(d, allocator);
+    }else {
+        return -1;
+    }
+
+    return 0;
 }
 
 int ytopen_sdk::AddFace(rapidjson::Value &result, const string& person_id, const std::vector<string>& imagePaths, int data_type, const string &tag)
@@ -371,13 +440,27 @@ int ytopen_sdk::AddFace(rapidjson::Value &result, const string& person_id, const
         }
         writer.EndArray();
     }
-    writer.String("data_type"); writer.Int(data_type);
     writer.String("person_id"); writer.String(person_id.c_str());
     writer.String("tag"); writer.String(tag.c_str());
     writer.EndObject();
 
     req = sbuffer.GetString();
-    return curl_method(addr, req, rsp);
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        rapidjson::Document d;
+        d.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(d.HasParseError()) {
+            std::cout << "RapidJson parse error " << d.GetParseError() << endl;
+            return -1;
+        }
+
+        rapidjson::Value::AllocatorType allocator;
+        result.CopyFrom(d, allocator);
+    }else {
+        return -1;
+    }
+
+    return 0;
 }
 
 int ytopen_sdk::DelFace(rapidjson::Value &result, const string& person_id, const std::vector<string>& face_ids)
@@ -405,8 +488,24 @@ int ytopen_sdk::DelFace(rapidjson::Value &result, const string& person_id, const
     }
     writer.EndArray();
     writer.EndObject();
+
     req = sbuffer.GetString();
-    return curl_method(addr, req, rsp);
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        rapidjson::Document d;
+        d.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(d.HasParseError()) {
+            std::cout << "RapidJson parse error " << d.GetParseError() << endl;
+            return -1;
+        }
+
+        rapidjson::Value::AllocatorType allocator;
+        result.CopyFrom(d, allocator);
+    }else {
+        return -1;
+    }
+
+    return 0;
 }
 
 int ytopen_sdk::SetInfo(rapidjson::Value &result, const string& person_id, const string& person_name, const string& tag)
@@ -431,7 +530,22 @@ int ytopen_sdk::SetInfo(rapidjson::Value &result, const string& person_id, const
     writer.EndObject();
 
     req = sbuffer.GetString();
-    return curl_method(addr, req, rsp);
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        rapidjson::Document d;
+        d.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(d.HasParseError()) {
+            std::cout << "RapidJson parse error " << d.GetParseError() << endl;
+            return -1;
+        }
+
+        rapidjson::Value::AllocatorType allocator;
+        result.CopyFrom(d, allocator);
+    }else {
+        return -1;
+    }
+
+    return 0;
 }
 
 int ytopen_sdk::GetInfo(rapidjson::Value &result, const string& person_id)
@@ -454,7 +568,22 @@ int ytopen_sdk::GetInfo(rapidjson::Value &result, const string& person_id)
     writer.EndObject();
 
     req = sbuffer.GetString();
-    return curl_method(addr, req, rsp);
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        rapidjson::Document d;
+        d.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(d.HasParseError()) {
+            std::cout << "RapidJson parse error " << d.GetParseError() << endl;
+            return -1;
+        }
+
+        rapidjson::Value::AllocatorType allocator;
+        result.CopyFrom(d, allocator);
+    }else {
+        return -1;
+    }
+
+    return 0;
 }
 
 int ytopen_sdk::GetGroupIds(rapidjson::Value &result)
@@ -476,7 +605,22 @@ int ytopen_sdk::GetGroupIds(rapidjson::Value &result)
     writer.EndObject();
 
     req = sbuffer.GetString();
-    return curl_method(addr, req, rsp);
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        rapidjson::Document d;
+        d.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(d.HasParseError()) {
+            std::cout << "RapidJson parse error " << d.GetParseError() << endl;
+            return -1;
+        }
+
+        rapidjson::Value::AllocatorType allocator;
+        result.CopyFrom(d, allocator);
+    }else {
+        return -1;
+    }
+
+    return 0;
 }
 
 int ytopen_sdk::GetPersonIds(rapidjson::Value &result, const string& group_id)
@@ -499,7 +643,22 @@ int ytopen_sdk::GetPersonIds(rapidjson::Value &result, const string& group_id)
     writer.EndObject();
 
     req = sbuffer.GetString();
-    return curl_method(addr, req, rsp);
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        rapidjson::Document d;
+        d.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(d.HasParseError()) {
+            std::cout << "RapidJson parse error " << d.GetParseError() << endl;
+            return -1;
+        }
+
+        rapidjson::Value::AllocatorType allocator;
+        result.CopyFrom(d, allocator);
+    }else {
+        return -1;
+    }
+
+    return 0;
 }
 
 int ytopen_sdk::GetFaceIds(rapidjson::Value &result, const string& person_id)
@@ -522,7 +681,22 @@ int ytopen_sdk::GetFaceIds(rapidjson::Value &result, const string& person_id)
     writer.EndObject();
 
     req = sbuffer.GetString();
-    return curl_method(addr, req, rsp);
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        rapidjson::Document d;
+        d.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(d.HasParseError()) {
+            std::cout << "RapidJson parse error " << d.GetParseError() << endl;
+            return -1;
+        }
+
+        rapidjson::Value::AllocatorType allocator;
+        result.CopyFrom(d, allocator);
+    }else {
+        return -1;
+    }
+
+    return 0;
 }
 
 int ytopen_sdk::GetFaceInfo(rapidjson::Value &result, const string&face_id)
@@ -545,7 +719,184 @@ int ytopen_sdk::GetFaceInfo(rapidjson::Value &result, const string&face_id)
     writer.EndObject();
 
     req = sbuffer.GetString();
-    return curl_method(addr, req, rsp);
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        rapidjson::Document d;
+        d.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(d.HasParseError()) {
+            std::cout << "RapidJson parse error " << d.GetParseError() << endl;
+            return -1;
+        }
+
+        rapidjson::Value::AllocatorType allocator;
+        result.CopyFrom(d, allocator);
+    }else {
+        return -1;
+    }
+
+    return 0;
+}
+
+int ytopen_sdk::FuzzyDetect(rapidjson::Value &result, const std::string &imagePath, int data_type, const string &cookie)
+{
+    string imageData;
+    if(data_type == 0 && 0 != read_image(imagePath, imageData)) {
+        cout << "image not exist " << imagePath << endl;
+        return -1;
+    }
+
+    std::stringstream ss;
+    ss<<host<<"/youtu/imageapi/fuzzydetect";
+
+    string addr;
+    addr.assign(ss.str());
+
+    string req;
+    string rsp;
+
+    StringBuffer sbuffer;
+    Writer<StringBuffer> writer(sbuffer);
+
+    writer.StartObject();
+    writer.String("app_id"); writer.String(app_id.c_str());
+    if(data_type == 0) {
+        string encode_data = b64_encode(imageData);
+        writer.String("image"); writer.String(encode_data.c_str());
+    }else {
+        writer.String("url"); writer.String(imageData.c_str());
+    }
+
+    if(!cookie.empty()) {
+        writer.String("cookie"); writer.String(cookie.c_str());
+    }
+
+    writer.EndObject();
+
+    req = sbuffer.GetString();
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        rapidjson::Document d;
+        d.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(d.HasParseError()) {
+            std::cout << "RapidJson parse error " << d.GetParseError() << endl;
+            return -1;
+        }
+
+        rapidjson::Value::AllocatorType allocator;
+        result.CopyFrom(d, allocator);
+    }else {
+        return -1;
+    }
+
+    return 0;
+}
+
+int ytopen_sdk::FoodDetect(rapidjson::Value &result, const std::string &imagePath, int data_type, const string &cookie)
+{
+    string imageData;
+    if(data_type == 0 && 0 != read_image(imagePath, imageData)) {
+        cout << "image not exist " << imagePath << endl;
+        return -1;
+    }
+
+    std::stringstream ss;
+    ss<<host<<"/youtu/imageapi/fooddetect";
+
+    string addr;
+    addr.assign(ss.str());
+
+    string req;
+    string rsp;
+
+    StringBuffer sbuffer;
+    Writer<StringBuffer> writer(sbuffer);
+
+    writer.StartObject();
+    writer.String("app_id"); writer.String(app_id.c_str());
+    if(data_type == 0) {
+        string encode_data = b64_encode(imageData);
+        writer.String("image"); writer.String(encode_data.c_str());
+    }else {
+        writer.String("url"); writer.String(imageData.c_str());
+    }
+
+    if(!cookie.empty()) {
+        writer.String("cookie"); writer.String(cookie.c_str());
+    }
+
+    writer.EndObject();
+
+    req = sbuffer.GetString();
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        rapidjson::Document d;
+        d.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(d.HasParseError()) {
+            std::cout << "RapidJson parse error " << d.GetParseError() << endl;
+            return -1;
+        }
+
+        rapidjson::Value::AllocatorType allocator;
+        result.CopyFrom(d, allocator);
+    }else {
+        return -1;
+    }
+
+    return 0;
+}
+
+int ytopen_sdk::ImageTag(rapidjson::Value &result, const std::string &imagePath, int data_type, const string &cookie)
+{
+    string imageData;
+    if(data_type == 0 && 0 != read_image(imagePath, imageData)) {
+        cout << "image not exist " << imagePath << endl;
+        return -1;
+    }
+
+    std::stringstream ss;
+    ss<<host<<"/youtu/imageapi/imagetag";
+
+    string addr;
+    addr.assign(ss.str());
+
+    string req;
+    string rsp;
+
+    StringBuffer sbuffer;
+    Writer<StringBuffer> writer(sbuffer);
+
+    writer.StartObject();
+    writer.String("app_id"); writer.String(app_id.c_str());
+    if(data_type == 0) {
+        string encode_data = b64_encode(imageData);
+        writer.String("image"); writer.String(encode_data.c_str());
+    }else {
+        writer.String("url"); writer.String(imageData.c_str());
+    }
+
+    if(!cookie.empty()) {
+        writer.String("cookie"); writer.String(cookie.c_str());
+    }
+
+    writer.EndObject();
+
+    req = sbuffer.GetString();
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        rapidjson::Document d;
+        d.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(d.HasParseError()) {
+            std::cout << "RapidJson parse error " << d.GetParseError() << endl;
+            return -1;
+        }
+
+        rapidjson::Value::AllocatorType allocator;
+        result.CopyFrom(d, allocator);
+    }else {
+        return -1;
+    }
+
+    return 0;
 }
 
 int writer(char *data, size_t size, size_t nmemb, std::string *writerData)
