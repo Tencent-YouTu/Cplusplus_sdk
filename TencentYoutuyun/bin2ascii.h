@@ -148,7 +148,7 @@ static std::string b64_encode(const std::string &s)
     std::string result;
 
     int base64_str_size = str_to_base64_len(s.size());
-    unsigned char * base_64_buf = new unsigned char[base64_str_size];
+    unsigned char * base_64_buf = new unsigned char[base64_str_size+1];
 
     if(base_64_buf == NULL)
     {
