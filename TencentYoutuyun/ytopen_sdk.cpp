@@ -86,8 +86,7 @@ int ytopen_sdk::DetectFace(rapidjson::Value &result, const string& imagePath, in
             return -1;
         }
 
-        rapidjson::Value::AllocatorType allocator;
-        result.CopyFrom(d, allocator);
+        result.CopyFrom(d, d.GetAllocator());
     }else {
         return -1;
     }
@@ -137,8 +136,7 @@ int ytopen_sdk::FaceShape(rapidjson::Value &result, const string& imagePath, int
             return -1;
         }
 
-        rapidjson::Value::AllocatorType allocator;
-        result.CopyFrom(d, allocator);
+        result.CopyFrom(d, d.GetAllocator());
     }else {
         return -1;
     }
@@ -192,8 +190,7 @@ int ytopen_sdk::FaceCompare(rapidjson::Value &result, const string& imagePathA, 
             return -1;
         }
 
-        rapidjson::Value::AllocatorType allocator;
-        result.CopyFrom(d, allocator);
+        result.CopyFrom(d, d.GetAllocator());
     }else {
         return -1;
     }
@@ -242,8 +239,7 @@ int ytopen_sdk::FaceVerify(rapidjson::Value &result, const string& person_id, co
             return -1;
         }
 
-        rapidjson::Value::AllocatorType allocator;
-        result.CopyFrom(d, allocator);
+        result.CopyFrom(d, d.GetAllocator());
     }else {
         return -1;
     }
@@ -292,8 +288,7 @@ int ytopen_sdk::FaceIdentify(rapidjson::Value &result, const string& group_id, c
             return -1;
         }
 
-        rapidjson::Value::AllocatorType allocator;
-        result.CopyFrom(d, allocator);
+        result.CopyFrom(d, d.GetAllocator());
     }else {
         return -1;
     }
@@ -349,8 +344,7 @@ int ytopen_sdk::NewPerson(rapidjson::Value &result, const string& person_id, con
             return -1;
         }
 
-        rapidjson::Value::AllocatorType allocator;
-        result.CopyFrom(d, allocator);
+        result.CopyFrom(d, d.GetAllocator());
     }else {
         return -1;
     }
@@ -387,8 +381,7 @@ int ytopen_sdk::DelPerson(rapidjson::Value &result, const string& person_id)
             return -1;
         }
 
-        rapidjson::Value::AllocatorType allocator;
-        result.CopyFrom(d, allocator);
+        result.CopyFrom(d, d.GetAllocator());
     }else {
         return -1;
     }
@@ -454,8 +447,7 @@ int ytopen_sdk::AddFace(rapidjson::Value &result, const string& person_id, const
             return -1;
         }
 
-        rapidjson::Value::AllocatorType allocator;
-        result.CopyFrom(d, allocator);
+        result.CopyFrom(d, d.GetAllocator());
     }else {
         return -1;
     }
@@ -499,8 +491,7 @@ int ytopen_sdk::DelFace(rapidjson::Value &result, const string& person_id, const
             return -1;
         }
 
-        rapidjson::Value::AllocatorType allocator;
-        result.CopyFrom(d, allocator);
+        result.CopyFrom(d, d.GetAllocator());
     }else {
         return -1;
     }
@@ -539,8 +530,7 @@ int ytopen_sdk::SetInfo(rapidjson::Value &result, const string& person_id, const
             return -1;
         }
 
-        rapidjson::Value::AllocatorType allocator;
-        result.CopyFrom(d, allocator);
+        result.CopyFrom(d, d.GetAllocator());
     }else {
         return -1;
     }
@@ -577,8 +567,7 @@ int ytopen_sdk::GetInfo(rapidjson::Value &result, const string& person_id)
             return -1;
         }
 
-        rapidjson::Value::AllocatorType allocator;
-        result.CopyFrom(d, allocator);
+        result.CopyFrom(d, d.GetAllocator());
     }else {
         return -1;
     }
@@ -614,8 +603,7 @@ int ytopen_sdk::GetGroupIds(rapidjson::Value &result)
             return -1;
         }
 
-        rapidjson::Value::AllocatorType allocator;
-        result.CopyFrom(d, allocator);
+        result.CopyFrom(d, d.GetAllocator());
     }else {
         return -1;
     }
@@ -652,8 +640,7 @@ int ytopen_sdk::GetPersonIds(rapidjson::Value &result, const string& group_id)
             return -1;
         }
 
-        rapidjson::Value::AllocatorType allocator;
-        result.CopyFrom(d, allocator);
+        result.CopyFrom(d, d.GetAllocator());
     }else {
         return -1;
     }
@@ -690,8 +677,7 @@ int ytopen_sdk::GetFaceIds(rapidjson::Value &result, const string& person_id)
             return -1;
         }
 
-        rapidjson::Value::AllocatorType allocator;
-        result.CopyFrom(d, allocator);
+        result.CopyFrom(d, d.GetAllocator());
     }else {
         return -1;
     }
@@ -728,8 +714,7 @@ int ytopen_sdk::GetFaceInfo(rapidjson::Value &result, const string&face_id)
             return -1;
         }
 
-        rapidjson::Value::AllocatorType allocator;
-        result.CopyFrom(d, allocator);
+        result.CopyFrom(d, d.GetAllocator());
     }else {
         return -1;
     }
@@ -782,8 +767,7 @@ int ytopen_sdk::FuzzyDetect(rapidjson::Value &result, const std::string &imagePa
             return -1;
         }
 
-        rapidjson::Value::AllocatorType allocator;
-        result.CopyFrom(d, allocator);
+        result.CopyFrom(d, d.GetAllocator());
     }else {
         return -1;
     }
@@ -836,8 +820,7 @@ int ytopen_sdk::FoodDetect(rapidjson::Value &result, const std::string &imagePat
             return -1;
         }
 
-        rapidjson::Value::AllocatorType allocator;
-        result.CopyFrom(d, allocator);
+        result.CopyFrom(d, d.GetAllocator());
     }else {
         return -1;
     }
@@ -890,8 +873,7 @@ int ytopen_sdk::ImageTag(rapidjson::Value &result, const std::string &imagePath,
             return -1;
         }
 
-        rapidjson::Value::AllocatorType allocator;
-        result.CopyFrom(d, allocator);
+        result.CopyFrom(d, d.GetAllocator());
     }else {
         return -1;
     }
