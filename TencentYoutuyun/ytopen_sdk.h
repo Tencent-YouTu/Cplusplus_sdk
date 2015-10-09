@@ -47,7 +47,7 @@ class ytopen_sdk
          * @param isBigFace 是否大脸模式
          * @return 0成功 -1失败
          */
-        int DetectFace(rapidjson::Value &result, const std::string& imagePath, int data_type = 0, bool isBigFace = false);
+        int DetectFace(rapidjson::Document &result, const std::string& imagePath, int data_type = 0, bool isBigFace = false);
 
         /**
          * @brief FaceShape
@@ -57,7 +57,7 @@ class ytopen_sdk
          * @param isBigFace 是否大脸模式
          * @return 0成功 -1失败
          */
-        int FaceShape(rapidjson::Value &result, const std::string& imagePath, int data_type = 0, bool isBigFace = false);
+        int FaceShape(rapidjson::Document &result, const std::string& imagePath, int data_type = 0, bool isBigFace = false);
 
         /**
          * @brief FaceCompare
@@ -67,7 +67,7 @@ class ytopen_sdk
          * @param data_type 图片数据类型 图片路径／url 0／1
          * @return 0成功 -1失败
          */
-        int FaceCompare(rapidjson::Value &result, const std::string& imagePathA, const std::string&imagePathB, int data_type = 0);
+        int FaceCompare(rapidjson::Document &result, const std::string& imagePathA, const std::string&imagePathB, int data_type = 0);
 
         /**
          * @brief FaceVerify
@@ -77,7 +77,7 @@ class ytopen_sdk
          * @param data_type 图片数据类型 图片路径／url 0／1
          * @return 0成功 -1失败
          */
-        int FaceVerify(rapidjson::Value &result, const std::string& person_id, const std::string& imagePath, int data_type = 0);
+        int FaceVerify(rapidjson::Document &result, const std::string& person_id, const std::string& imagePath, int data_type = 0);
 
         /**
          * @brief FaceIdentify
@@ -87,7 +87,7 @@ class ytopen_sdk
          * @param data_type 图片数据类型 图片路径／url 0／1
          * @return 0成功 -1失败
          */
-        int FaceIdentify(rapidjson::Value &result, const std::string& group_id, const std::string& imagePath, int data_type = 0);
+        int FaceIdentify(rapidjson::Document &result, const std::string& group_id, const std::string& imagePath, int data_type = 0);
 
         /**
          * @brief NewPerson
@@ -100,7 +100,7 @@ class ytopen_sdk
          * @param tag 备注信息，用户自解释字段
          * @return 0成功 -1失败
          */
-        int NewPerson(rapidjson::Value &result, const std::string& person_id, const std::string &person_name, const std::vector<std::string> &group_ids, const std::string& imagePath, int data_type = 0, const std::string &tag = "");
+        int NewPerson(rapidjson::Document &result, const std::string& person_id, const std::string &person_name, const std::vector<std::string> &group_ids, const std::string& imagePath, int data_type = 0, const std::string &tag = "");
 
         /**
          * @brief DelPerson
@@ -108,7 +108,7 @@ class ytopen_sdk
          * @param person_id 待删除的个体id
          * @return 0成功 -1失败
          */
-        int DelPerson(rapidjson::Value &result, const std::string& person_id);
+        int DelPerson(rapidjson::Document &result, const std::string& person_id);
 
         /**
          * @brief AddFace
@@ -119,7 +119,7 @@ class ytopen_sdk
          * @param tag 人脸备注信息，用户自解释字段
          * @return
          */
-        int AddFace(rapidjson::Value &result, const std::string& person_id, const std::vector<std::string>& imagePaths, int data_type = 0, const std::string &tag="");
+        int AddFace(rapidjson::Document &result, const std::string& person_id, const std::vector<std::string>& imagePaths, int data_type = 0, const std::string &tag="");
 
         /**
          * @brief DelFace
@@ -128,7 +128,7 @@ class ytopen_sdk
          * @param face_ids 待删除的人脸id
          * @return 0成功 -1失败
          */
-        int DelFace(rapidjson::Value &result, const std::string& person_id, const std::vector<std::string>& face_ids);
+        int DelFace(rapidjson::Document &result, const std::string& person_id, const std::vector<std::string>& face_ids);
 
         /**
          * @brief SetInfo
@@ -138,7 +138,7 @@ class ytopen_sdk
          * @param tag 新设置的人脸备注信息
          * @return 0成功 -1失败
          */
-        int SetInfo(rapidjson::Value &result, const std::string& person_id, const std::string& person_name, const std::string& tag);
+        int SetInfo(rapidjson::Document &result, const std::string& person_id, const std::string& person_name, const std::string& tag);
 
         /**
          * @brief GetInfo
@@ -146,14 +146,14 @@ class ytopen_sdk
          * @param person_id 待查询的个体身份id
          * @return 0成功 -1失败
          */
-        int GetInfo(rapidjson::Value &result, const std::string& person_id);
+        int GetInfo(rapidjson::Document &result, const std::string& person_id);
 
         /**
          * @brief GetGroupIds
          * @param result Json格式的请求结果
          * @return 0成功 -1失败
          */
-        int GetGroupIds(rapidjson::Value &result);
+        int GetGroupIds(rapidjson::Document &result);
 
         /**
          * @brief GetPersonIds
@@ -161,7 +161,7 @@ class ytopen_sdk
          * @param group_id 待查询的组id
          * @return 0成功 -1失败
          */
-        int GetPersonIds(rapidjson::Value &result, const std::string& group_id);
+        int GetPersonIds(rapidjson::Document &result, const std::string& group_id);
 
         /**
          * @brief GetFaceIds
@@ -169,7 +169,7 @@ class ytopen_sdk
          * @param person_id 待查询的个体id
          * @return 0成功 -1失败
          */
-        int GetFaceIds(rapidjson::Value &result, const std::string& person_id);
+        int GetFaceIds(rapidjson::Document &result, const std::string& person_id);
 
         /**
          * @brief GetFaceInfo
@@ -177,7 +177,7 @@ class ytopen_sdk
          * @param face_id 待查询的人脸id
          * @return 0成功 -1失败
          */
-        int GetFaceInfo(rapidjson::Value &result, const std::string &face_id);
+        int GetFaceInfo(rapidjson::Document &result, const std::string &face_id);
 
         /**
          * @brief FuzzyDetect
@@ -187,7 +187,7 @@ class ytopen_sdk
          * @param cookie
          * @return 0成功 -1失败
          */
-        int FuzzyDetect(rapidjson::Value &result, const std::string &imagePath, int data_type = 0, const std::string &cookie = "");
+        int FuzzyDetect(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, const std::string &cookie = "");
 
         /**
          * @brief FoodDetect
@@ -198,7 +198,7 @@ class ytopen_sdk
          * @return 0成功 -1失败
          */
 
-        int FoodDetect(rapidjson::Value &result, const std::string &imagePath, int data_type = 0, const std::string &cookie = "");
+        int FoodDetect(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, const std::string &cookie = "");
 
         /**
          * @brief ImageTag
@@ -208,7 +208,7 @@ class ytopen_sdk
          * @param cookie
          * @return 0成功 -1失败
          */
-        int ImageTag(rapidjson::Value &result, const std::string &imagePath, int data_type = 0, const std::string &cookie = "");
+        int ImageTag(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, const std::string &cookie = "");
 
     private:
         int curl_method(const std::string& addr, const std::string &req_str, std::string &rsp_str);
