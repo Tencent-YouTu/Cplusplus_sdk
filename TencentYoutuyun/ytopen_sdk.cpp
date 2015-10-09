@@ -1,4 +1,5 @@
 #include "ytopen_sdk.h"
+#include <memory>
 
 using namespace std;
 using namespace rapidjson;
@@ -20,10 +21,15 @@ int read_image(string filesrc,std::string& data)
     fr.seekg(0,ios::end);
     int length = fr.tellg();
     fr.seekg(0,ios::beg);
-    char * image_data=new char[length];
+
+    if(length > 1024*1024*2) {
+        std::cout<<"image too large: "<<length<<std::endl;
+        return -1;
+    }
+
+    char image_data[1024*1024*2];
     fr.read(image_data,length);
     fr.close();
-    std::cout<<"image_data length is:"<<length<<std::endl;
 
     data.assign(image_data, length);
     return 0;
@@ -48,7 +54,7 @@ int ytopen_sdk::DetectFace(rapidjson::Value &result, const string& imagePath, in
 {
     string imageData;
     if(data_type == 0 && 0 != read_image(imagePath, imageData)) {
-        cout << "image not exist " << imagePath << endl;
+        cout << "image read failed. " << imagePath << endl;
         return -1;
     }
 
@@ -70,7 +76,7 @@ int ytopen_sdk::DetectFace(rapidjson::Value &result, const string& imagePath, in
         string encode_data = b64_encode(imageData);
         writer.String("image"); writer.String(encode_data.c_str());
     }else {
-        writer.String("url"); writer.String(imageData.c_str());
+        writer.String("url"); writer.String(imagePath.c_str());
     }
     writer.String("mode"); writer.Uint(isBigFace);
 
@@ -98,7 +104,7 @@ int ytopen_sdk::FaceShape(rapidjson::Value &result, const string& imagePath, int
 {
     string imageData;
     if(data_type == 0 && 0 != read_image(imagePath, imageData)) {
-        cout << "image not exist " << imagePath << endl;
+        cout << "image read failed. " << imagePath << endl;
         return -1;
     }
 
@@ -120,7 +126,7 @@ int ytopen_sdk::FaceShape(rapidjson::Value &result, const string& imagePath, int
         string encode_data = b64_encode(imageData);
         writer.String("image"); writer.String(encode_data.c_str());
     }else {
-        writer.String("url"); writer.String(imageData.c_str());
+        writer.String("url"); writer.String(imagePath.c_str());
     }
     writer.String("mode"); writer.Uint(isBigFace);
 
@@ -151,7 +157,7 @@ int ytopen_sdk::FaceCompare(rapidjson::Value &result, const string& imagePathA, 
     string imageA, imageB;
     if(data_type == 0 &&
          (0 != read_image(imagePathA, imageA) || 0 != read_image(imagePathB, imageB))) {
-        cout << "image not exist " << imagePathA << "," << imagePathB << endl;
+        cout << "image read failed. " << imagePathA << "," << imagePathB << endl;
         return -1;
     }
 
@@ -202,7 +208,7 @@ int ytopen_sdk::FaceVerify(rapidjson::Value &result, const string& person_id, co
 {
     string imageData;
     if(data_type == 0 && 0 != read_image(imagePath, imageData)) {
-        cout << "image not exist " << imagePath << endl;
+        cout << "image read failed. " << imagePath << endl;
         return -1;
     }
 
@@ -224,7 +230,7 @@ int ytopen_sdk::FaceVerify(rapidjson::Value &result, const string& person_id, co
         string encode_data = b64_encode(imageData);
         writer.String("image"); writer.String(encode_data.c_str());
     }else {
-        writer.String("url"); writer.String(imageData.c_str());
+        writer.String("url"); writer.String(imagePath.c_str());
     }
     writer.String("person_id"); writer.String(person_id.c_str());
     writer.EndObject();
@@ -251,7 +257,7 @@ int ytopen_sdk::FaceIdentify(rapidjson::Value &result, const string& group_id, c
 {
     string imageData;
     if(data_type == 0 && 0 != read_image(imagePath, imageData)) {
-        cout << "image not exist " << imagePath << endl;
+        cout << "image read failed. " << imagePath << endl;
         return -1;
     }
 
@@ -273,7 +279,7 @@ int ytopen_sdk::FaceIdentify(rapidjson::Value &result, const string& group_id, c
         string encode_data = b64_encode(imageData);
         writer.String("image"); writer.String(encode_data.c_str());
     }else {
-        writer.String("url"); writer.String(imageData.c_str());
+        writer.String("url"); writer.String(imagePath.c_str());
     }
     writer.String("group_id"); writer.String(group_id.c_str());
     writer.EndObject();
@@ -300,7 +306,7 @@ int ytopen_sdk::NewPerson(rapidjson::Value &result, const string& person_id, con
 {
     string imageData;
     if(data_type == 0 && 0 != read_image(imagePath, imageData)) {
-        cout << "image not exist " << imagePath << endl;
+        cout << "image read failed. " << imagePath << endl;
         return -1;
     }
 
@@ -322,7 +328,7 @@ int ytopen_sdk::NewPerson(rapidjson::Value &result, const string& person_id, con
         string encode_data = b64_encode(imageData);
         writer.String("image"); writer.String(encode_data.c_str());
     }else {
-        writer.String("url"); writer.String(imageData.c_str());
+        writer.String("url"); writer.String(imagePath.c_str());
     }
     writer.String("person_id"); writer.String(person_id.c_str());
     writer.String("person_name"); writer.String(person_name.c_str());
@@ -726,7 +732,7 @@ int ytopen_sdk::FuzzyDetect(rapidjson::Value &result, const std::string &imagePa
 {
     string imageData;
     if(data_type == 0 && 0 != read_image(imagePath, imageData)) {
-        cout << "image not exist " << imagePath << endl;
+        cout << "image read failed. " << imagePath << endl;
         return -1;
     }
 
@@ -748,7 +754,7 @@ int ytopen_sdk::FuzzyDetect(rapidjson::Value &result, const std::string &imagePa
         string encode_data = b64_encode(imageData);
         writer.String("image"); writer.String(encode_data.c_str());
     }else {
-        writer.String("url"); writer.String(imageData.c_str());
+        writer.String("url"); writer.String(imagePath.c_str());
     }
 
     if(!cookie.empty()) {
@@ -779,7 +785,7 @@ int ytopen_sdk::FoodDetect(rapidjson::Value &result, const std::string &imagePat
 {
     string imageData;
     if(data_type == 0 && 0 != read_image(imagePath, imageData)) {
-        cout << "image not exist " << imagePath << endl;
+        cout << "image read failed. " << imagePath << endl;
         return -1;
     }
 
@@ -801,7 +807,7 @@ int ytopen_sdk::FoodDetect(rapidjson::Value &result, const std::string &imagePat
         string encode_data = b64_encode(imageData);
         writer.String("image"); writer.String(encode_data.c_str());
     }else {
-        writer.String("url"); writer.String(imageData.c_str());
+        writer.String("url"); writer.String(imagePath.c_str());
     }
 
     if(!cookie.empty()) {
@@ -832,7 +838,7 @@ int ytopen_sdk::ImageTag(rapidjson::Value &result, const std::string &imagePath,
 {
     string imageData;
     if(data_type == 0 && 0 != read_image(imagePath, imageData)) {
-        cout << "image not exist " << imagePath << endl;
+        cout << "image read failed. " << imagePath << endl;
         return -1;
     }
 
@@ -854,7 +860,7 @@ int ytopen_sdk::ImageTag(rapidjson::Value &result, const std::string &imagePath,
         string encode_data = b64_encode(imageData);
         writer.String("image"); writer.String(encode_data.c_str());
     }else {
-        writer.String("url"); writer.String(imageData.c_str());
+        writer.String("url"); writer.String(imagePath.c_str());
     }
 
     if(!cookie.empty()) {
