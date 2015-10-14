@@ -8,8 +8,8 @@ BASEDIR=`pwd`
 cd openssl-1.0.1k
 
 echo "install to $BASEDIR"
-./config --prefix="$BASEDIR"
-make -j5
+./config --prefix="$BASEDIR" shared
+make -j1
 make install
 echo "make ok clean"
 cd ..

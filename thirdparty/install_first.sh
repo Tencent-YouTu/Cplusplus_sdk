@@ -33,7 +33,9 @@ if [ $options"x" != "Yx" ]; then
 fi
 
 #------------------------------------------------------
-for dir in `ls .`
+list_dir="openssl curl"
+
+for dir in $list_dir
 do
    if [ -d $dir ];
    then
