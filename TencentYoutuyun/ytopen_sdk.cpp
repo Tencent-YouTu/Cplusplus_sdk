@@ -40,7 +40,7 @@ void ytopen_sdk::Init(const AppSign& t_app_sign, Domain domain)
     app_sign = t_app_sign;
 
     char t_app_id[64];
-    snprintf(t_app_id, 63, "%result", t_app_sign.app_id);
+    snprintf(t_app_id, 63, "%d", t_app_sign.app_id);
     app_id.assign(t_app_id);
 
     if(domain == API_YOUTU_END_POINT) {
