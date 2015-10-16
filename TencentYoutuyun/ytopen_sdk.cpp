@@ -890,7 +890,7 @@ int ytopen_sdk::curl_method(const string &addr, const string &req_str, string &r
         qc_app_sign(app_sign.app_id, 
                     app_sign.secret_id.c_str(), 
                     app_sign.secret_key.c_str(), 
-                    1000 + cur_time,
+                    2592000 + cur_time,
                     app_sign.user_id.c_str(), 
                     sign);
 
