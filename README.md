@@ -19,7 +19,7 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 1. 下载sdk到您的目录${Cplusplus_sdk}
 	git clone https://github.com/TencentYouTu/Cplusplus_sdk.git
 2. 进入${Cplusplus_sdk}/thirdparty，执行
-	sh install_first.sh
+	bash install_first.sh
 3. 构建CMake编译工程,在${Cplusplus_sdk}/build中生成二进制sample程序
 	mkdir ${Cplusplus_sdk}/build
 	cd ${Cplusplus_sdk}/build
