@@ -851,6 +851,55 @@ int ytopen_sdk::ImageTag(rapidjson::Document &result, const std::string &imagePa
     return 0;
 }
 
+int ytopen_sdk::IdcardOcr(rapidjson::Document &result, const std::string &imagePath, int data_type, int card_type)
+{
+    string imageData;
+    if(data_type == 0 && 0 != read_image(imagePath, imageData)) {
+        cout << "image read failed. " << imagePath << endl;
+        return -1;
+    }
+
+    std::stringstream ss;
+    ss<<host<<"/youtu/ocrapi/idcardocr";
+
+    string addr;
+    addr.assign(ss.str());
+
+    string req;
+    string rsp;
+
+    StringBuffer sbuffer;
+    Writer<StringBuffer> writer(sbuffer);
+
+    writer.StartObject();
+    writer.String("app_id"); writer.String(app_id.c_str());
+    if(data_type == 0) {
+        string encode_data = b64_encode(imageData);
+        writer.String("image"); writer.String(encode_data.c_str());
+    }else {
+        writer.String("url"); writer.String(imagePath.c_str());
+    }
+
+    writer.String("card_type"); writer.Int(card_type);
+
+    writer.EndObject();
+
+    req = sbuffer.GetString();
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        result.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(result.HasParseError()) {
+            std::cout << "RapidJson parse error " << result.GetParseError() << endl;
+            return -1;
+        }
+
+    }else {
+        return -1;
+    }
+
+    return 0;
+}
+
 int writer(char *data, size_t size, size_t nmemb, std::string *writerData)
 {
      int len = size*nmemb;

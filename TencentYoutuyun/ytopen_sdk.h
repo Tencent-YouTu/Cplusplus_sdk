@@ -42,8 +42,8 @@ class ytopen_sdk
         /**
          * @brief DetectFace
          * @param result Json格式的请求结果
-         * @param imagePath 待检测的图片数据路径／url
-         * @param data_type 图片数据类型 图片路径／url 0／1
+         * @param imagePath 待检测的图片数据本地路径／url
+         * @param data_type 图片数据类型 图片本地路径／url 0／1
          * @param isBigFace 是否大脸模式
          * @return 0成功 -1失败
          */
@@ -52,8 +52,8 @@ class ytopen_sdk
         /**
          * @brief FaceShape
          * @param result Json格式的请求结果
-         * @param imagePath 待检测的图片数据路径／url
-         * @param data_type 图片数据类型 图片路径／url 0／1
+         * @param imagePath 待检测的图片数据本地路径／url
+         * @param data_type 图片数据类型 图片本地路径／url 0／1
          * @param isBigFace 是否大脸模式
          * @return 0成功 -1失败
          */
@@ -62,9 +62,9 @@ class ytopen_sdk
         /**
          * @brief FaceCompare
          * @param result Json格式的请求结果
-         * @param imagePathA 待比对的A图片路径／url
-         * @param imagePathB 待比对的A图片路径／url
-         * @param data_type 图片数据类型 图片路径／url 0／1
+         * @param imagePathA 待比对的A图片本地路径／url
+         * @param imagePathB 待比对的A图片本地路径／url
+         * @param data_type 图片数据类型 图片本地路径／url 0／1
          * @return 0成功 -1失败
          */
         int FaceCompare(rapidjson::Document &result, const std::string& imagePathA, const std::string&imagePathB, int data_type = 0);
@@ -73,8 +73,8 @@ class ytopen_sdk
          * @brief FaceVerify
          * @param result Json格式的请求结果
          * @param person_id 待验证的人脸id
-         * @param imagePath 待验证的图片路径／url
-         * @param data_type 图片数据类型 图片路径／url 0／1
+         * @param imagePath 待验证的图片本地路径／url
+         * @param data_type 图片数据类型 图片本地路径／url 0／1
          * @return 0成功 -1失败
          */
         int FaceVerify(rapidjson::Document &result, const std::string& person_id, const std::string& imagePath, int data_type = 0);
@@ -83,8 +83,8 @@ class ytopen_sdk
          * @brief FaceIdentify
          * @param result Json格式的请求结果
          * @param group_id 识别的组id
-         * @param imagePath 待识别的图片路径／url
-         * @param data_type 图片数据类型 图片路径／url 0／1
+         * @param imagePath 待识别的图片本地路径／url
+         * @param data_type 图片数据类型 图片本地路径／url 0／1
          * @return 0成功 -1失败
          */
         int FaceIdentify(rapidjson::Document &result, const std::string& group_id, const std::string& imagePath, int data_type = 0);
@@ -95,8 +95,8 @@ class ytopen_sdk
          * @param person_id 新建的个体id，用户指定，需要保证app_id下的唯一性
          * @param person_name 个体姓名
          * @param group_ids 新建的个体存放的组id，可以指定多个组id，用户指定（组默认创建）
-         * @param imagePath 包含个体人脸的图片路径／url
-         * @param data_type 图片数据类型 图片路径／url 0／1
+         * @param imagePath 包含个体人脸的图片本地路径／url
+         * @param data_type 图片数据类型 图片本地路径／url 0／1
          * @param tag 备注信息，用户自解释字段
          * @return 0成功 -1失败
          */
@@ -114,8 +114,8 @@ class ytopen_sdk
          * @brief AddFace
          * @param result Json格式的请求结果
          * @param person_id 新增人脸的个体身份id
-         * @param imagePaths 待增加的包含人脸的图片路径，可加入多张（包体大小<2m）
-         * @param data_type 图片数据类型 图片路径／url 0／1
+         * @param imagePaths 待增加的包含人脸的图片本地路径，可加入多张（包体大小<2m）
+         * @param data_type 图片数据类型 图片本地路径／url 0／1
          * @param tag 人脸备注信息，用户自解释字段
          * @return
          */
@@ -182,8 +182,8 @@ class ytopen_sdk
         /**
          * @brief FuzzyDetect
          * @param result Json格式的请求结果
-         * @param imagePath 图片路径／url
-         * @param data_type 图片数据类型 路径／url 0／1
+         * @param imagePath 图片本地路径／url
+         * @param data_type 图片数据类型 本地路径／url 0／1
          * @param cookie
          * @return 0成功 -1失败
          */
@@ -192,8 +192,8 @@ class ytopen_sdk
         /**
          * @brief FoodDetect
          * @param result Json格式的请求结果
-         * @param imagePath 图片路径／url
-         * @param data_type 图片数据类型 路径／url 0／1
+         * @param imagePath 图片本地路径／url
+         * @param data_type 图片数据类型 本地路径／url 0／1
          * @param cookie
          * @return 0成功 -1失败
          */
@@ -201,14 +201,24 @@ class ytopen_sdk
         int FoodDetect(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, const std::string &cookie = "");
 
         /**
-         * @brief ImageTag
+         * @brief ImageTag 图片分类
          * @param result Json格式的请求结果
-         * @param imagePath 图片路径／url
-         * @param data_type 图片数据类型 路径／url 0／1
+         * @param imagePath 图片本地路径／url
+         * @param data_type 图片数据类型 本地路径／url 0／1
          * @param cookie
          * @return 0成功 -1失败
          */
         int ImageTag(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, const std::string &cookie = "");
+
+        /**
+         * @brief IdcardOcr 身份证OCR识别
+         * @param result
+         * @param imagePath
+         * @param data_type 图片数据类型 本地路径／url 0／1
+         * @param card_type 身份证图片类型，0-正面，1-反面
+         * @return
+         */
+        int IdcardOcr(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, int card_type = 0);
 
     private:
         int curl_method(const std::string& addr, const std::string &req_str, std::string &rsp_str);
