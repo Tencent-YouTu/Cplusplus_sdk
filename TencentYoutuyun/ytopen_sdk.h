@@ -211,6 +211,16 @@ class ytopen_sdk
         int ImageTag(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, const std::string &cookie = "");
 
         /**
+         * @brief ImagePorn
+         * @param result
+         * @param imagePath
+         * @param data_type
+         * @param cookie
+         * @return
+         */
+        int ImagePorn(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, const std::string &cookie = "");
+
+        /**
          * @brief IdcardOcr 身份证OCR识别
          * @param result
          * @param imagePath
@@ -219,6 +229,16 @@ class ytopen_sdk
          * @return
          */
         int IdcardOcr(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, int card_type = 0);
+
+        /**
+         * @brief NamecardOcr
+         * @param result
+         * @param imagePath
+         * @param data_type
+         * @param card_type
+         * @return
+         */
+        int NamecardOcr(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, bool retImage = 0);
 
     private:
         int curl_method(const std::string& addr, const std::string &req_str, std::string &rsp_str);
