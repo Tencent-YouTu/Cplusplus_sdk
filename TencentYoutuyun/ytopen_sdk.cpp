@@ -7,6 +7,16 @@ using namespace rapidjson;
 string ytopen_sdk::host_youtu = "http://api.youtu.qq.com";
 string ytopen_sdk::host_tencentyun = "https://youtu.api.qcloud.com";
 
+//a must,curl global init, ugly but it works.
+class CurlGlobalInit {
+    public:
+        CurlGlobalInit() {
+            curl_global_init(CURL_GLOBAL_ALL);
+        }
+};
+
+static CurlGlobalInit gCurlGlobalInit;
+
 int read_image(string filesrc,std::string& data)
 {
     std::ifstream fr;
