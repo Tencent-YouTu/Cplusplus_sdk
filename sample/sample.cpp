@@ -11,10 +11,10 @@ int main(int argc,char * argv[])
     //app sign params.
     ytopen_sdk::AppSign m_app_sign = 
     {
-        1000061,
+        123,
         "AKIDytaL55OwoRYDMGFzols94MDrf8URHA0N",
         "RRJoPEXyvVeZtiCwthW6N6NDq888Pk0o",
-        "3041722595"
+        "888"
     };
 
     ytopen_sdk m_sdk;
