@@ -4,8 +4,9 @@
 using namespace std;
 using namespace rapidjson;
 
-string ytopen_sdk::host_youtu = "http://api.youtu.qq.com";
+string ytopen_sdk::host_youtu = "https://api.youtu.qq.com";
 string ytopen_sdk::host_tencentyun = "https://youtu.api.qcloud.com";
+string ytopen_sdk::host_face_in_youtu = "https://vip-api.youtu.qq.com";
 
 //a must,curl global init, ugly but it works.
 class CurlGlobalInit {
@@ -55,6 +56,9 @@ void ytopen_sdk::Init(const AppSign& t_app_sign, Domain domain)
 
     if(domain == API_YOUTU_END_POINT) {
         host = host_youtu;
+    } else if (domain == API_FACE_IN_YOUTU_END_POINT)
+    {
+        host = host_face_in_youtu;
     }else {
         host = host_tencentyun;
     }
@@ -1010,6 +1014,228 @@ int ytopen_sdk::NamecardOcr(rapidjson::Document &result, const std::string &imag
     return 0;
 }
 
+int ytopen_sdk::LiveGetFour(rapidjson::Document &result)
+{
+    std::stringstream ss;
+    ss<<host<<"/youtu/openliveapi/livegetfour";
+
+    string addr;
+    addr.assign(ss.str());
+
+    string req;
+    string rsp;
+
+    StringBuffer sbuffer;
+    Writer<StringBuffer> writer(sbuffer);
+
+    writer.StartObject();
+    writer.String("app_id"); writer.String(app_id.c_str());
+    writer.EndObject();
+
+    req = sbuffer.GetString();
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        result.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(result.HasParseError()) {
+            std::cout << "RapidJson parse error " << result.GetParseError() << endl;
+            return -1;
+        }
+
+    }else {
+        return -1;
+    }
+
+    return 0;
+}
+
+int ytopen_sdk::LiveDetectFour(rapidjson::Document &result, const std::string &videoPath, const std::string &validate_data, const std::string &imagePath, bool compare_flag = 1)
+{
+    std::stringstream ss;
+    ss<<host<<"/youtu/openliveapi/livedetectfour";
+
+    std::string videoData;
+    if (0 != read_image(videoPath, videoData))
+    {
+        cout << "video read failed. " << videoPath << endl;
+        return -1;
+    }
+
+    if (validate_data.empty())
+    {
+        cout << "validate_data is empty. " << endl;
+        return -1;
+    }
+
+    std::string imageData;
+    if (compare_flag && 0 != read_image(imagePath, imageData))
+    {
+        cout << "compare_flag is true and image read failed. " << imagePath << endl;
+        return -1;
+    }
+
+    string addr;
+    addr.assign(ss.str());
+
+    string req;
+    string rsp;
+
+    StringBuffer sbuffer;
+    Writer<StringBuffer> writer(sbuffer);
+
+    writer.StartObject();
+    writer.String("app_id"); writer.String(app_id.c_str());
+
+    writer.String("validate_data"); writer.String(validate_data.c_str());
+    writer.String("compare_flag");writer.Bool(compare_flag);
+
+    std::string video_encode_data = b64_encode(videoData);
+    writer.String("video"); writer.String(video_encode_data.c_str());
+
+    if(compare_flag)
+    {
+        string image_encode_data = b64_encode(imageData);
+        writer.String("card"); writer.String(image_encode_data.c_str());
+    }
+
+    writer.EndObject();
+
+    req = sbuffer.GetString();
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        result.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(result.HasParseError()) {
+            std::cout << "RapidJson parse error " << result.GetParseError() << endl;
+            return -1;
+        }
+
+    }else {
+        return -1;
+    }
+
+    return 0;
+}
+
+
+int ytopen_sdk::IdCardLiveDetectFour(rapidjson::Document &result, const std::string &videoPath, const std::string &validate_data, const std::string &id, const std::string &name)
+{
+    std::stringstream ss;
+    ss<<host<<"/youtu/openliveapi/idcardlivedetectfour";
+
+    std::string videoData;
+    if (0 != read_image(videoPath, videoData))
+    {
+        cout << "video read failed. " << videoPath << endl;
+        return -1;
+    }
+
+    if (validate_data.empty())
+    {
+        cout << "validate_data is empty. " << endl;
+        return -1;
+    }
+
+    if (id.empty() || name.empty())
+    {
+        cout << "id or name is empty " << endl;
+        return -1;
+    }
+
+    string addr;
+    addr.assign(ss.str());
+
+    string req;
+    string rsp;
+
+    StringBuffer sbuffer;
+    Writer<StringBuffer> writer(sbuffer);
+
+    writer.StartObject();
+    writer.String("app_id"); writer.String(app_id.c_str());
+    writer.String("validate_data"); writer.String(validate_data.c_str());
+
+    writer.String("idcard_number"); writer.String(id.c_str());
+    writer.String("idcard_name"); writer.String(name.c_str());
+
+    std::string video_encode_data = b64_encode(videoData);
+    writer.String("video"); writer.String(video_encode_data.c_str());
+
+    writer.EndObject();
+
+    req = sbuffer.GetString();
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        result.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(result.HasParseError()) {
+            std::cout << "RapidJson parse error " << result.GetParseError() << endl;
+            return -1;
+        }
+
+    }else {
+        return -1;
+    }
+
+    return 0;
+}
+
+int ytopen_sdk::IdCardFaceCompare(rapidjson::Document &result, const std::string &id, const std::string &name, const std::string &imagePath, int data_type = 0)
+{
+    result.SetNull();
+    std::stringstream ss;
+    ss<<host<<"/youtu/openliveapi/idcardfacecompare";
+
+    string imageData;
+    if(data_type == 0 && 0 != read_image(imagePath, imageData))
+    {
+        cout << "image read failed. " << imagePath << endl;
+        return -1;
+    }
+
+    if (id.empty() || name.empty())
+    {
+        cout << "id or name is empty "  << endl;
+        return -1;
+    }
+
+    string addr;
+    addr.assign(ss.str());
+
+    string req;
+    string rsp;
+
+    StringBuffer sbuffer;
+    Writer<StringBuffer> writer(sbuffer);
+
+    writer.StartObject();
+    writer.String("app_id"); writer.String(app_id.c_str());
+
+    if(data_type == 0) {
+        string encode_data = b64_encode(imageData);
+        writer.String("image"); writer.String(encode_data.c_str());
+    }else {
+        writer.String("url"); writer.String(imagePath.c_str());
+    }
+
+    writer.String("idcard_number"); writer.String(id.c_str());
+    writer.String("idcard_name"); writer.String(name.c_str());
+
+    writer.EndObject();
+
+    req = sbuffer.GetString();
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        result.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(result.HasParseError()) {
+            std::cout << "RapidJson parse error " << result.GetParseError() << endl;
+            return -1;
+        }
+
+    }else {
+        return -1;
+    }
+
+    return 0;
+}
+
 int writer(char *data, size_t size, size_t nmemb, std::string *writerData)
 {
      int len = size*nmemb;
@@ -1035,6 +1261,9 @@ int ytopen_sdk::curl_method(const string &addr, const string &req_str, string &r
         curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 5);
         curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1);
         curl_easy_setopt(curl, CURLOPT_TIMEOUT, 60);
+
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 0L);
+        curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
 
         struct curl_slist *headers=NULL; /* init to NULL is important */
         headers = curl_slist_append(headers, "Content-Type: text/json");

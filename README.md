@@ -219,6 +219,48 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 - 参数
 	- `retimage` 是否需要返回处理结果图，true返回，false不返回
 
+###获取四字唇语 
+- 接口
+`int LiveGetFour(rapidjson::Document &result);`
+- 参数
+	- 无
+
+###带数据源四字人脸核身
+- 接口
+`int LiveDetectFour(rapidjson::Document &result, const std::string &videoPath, const std::string &validate_data, const std::string &imagePath, bool compare_flag = 1);`
+- 参数
+	- `videoPath` 视频的路径
+	- `validate_data` LiveGetFour获取的四字唇语
+	- `imagePath_data` 对比照片的路劲
+	- `compare_flag`  视频与照片是否进行对比，1 对比 0不对比
+
+###不带数据源四字人脸核身
+- 接口
+`int IdCardLiveDetectFour(rapidjson::Document &result, const std::string &videoPath, const std::string &validate_data, const std::string &id, const std::string &name);`
+- 参数
+	- `videoPath` 视频的路径
+	- `validate_data` LiveGetFour获取的四字唇语
+	- `id` 身份证号码
+	- `name`  身份证姓名
+
+###不带数据源四字人脸核身
+- 接口
+`int IdCardLiveDetectFour(rapidjson::Document &result, const std::string &videoPath, const std::string &validate_data, const std::string &id, const std::string &name);`
+- 参数
+	- `videoPath` 视频的路径
+	- `validate_data` LiveGetFour获取的四字唇语
+	- `id` 身份证号码
+	- `name`  身份证姓名
+
+
+###不带数据源人脸对比
+- 接口
+`int IdCardFaceCompare(rapidjson::Document &result, const std::string &id, const std::string &name, const std::string &imagePath, int data_type = 0);`
+- 参数
+	- `id` 身份证号码
+	- `name`  身份证姓名
+	- `imagePath` 照片的路径
+	- `data_type` 0代表本地照片，1代表url
 ```
 ```
 更多详情和文档说明参见

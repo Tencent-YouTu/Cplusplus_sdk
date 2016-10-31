@@ -26,7 +26,8 @@ class ytopen_sdk
         enum Domain
         {
             API_YOUTU_END_POINT = 0,
-            API_TENCENTYUN_END_POINT = 1
+            API_TENCENTYUN_END_POINT = 1,
+            API_FACE_IN_YOUTU_END_POINT = 2
         };
 
     public:
@@ -240,12 +241,52 @@ class ytopen_sdk
          */
         int NamecardOcr(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, bool retImage = 0);
 
+        /**
+         * @brief LiveGetFour
+         * @param result
+         */
+        int LiveGetFour(rapidjson::Document &result);
+
+        /**
+         * @brief LiveDetectFour
+         * @param result
+         * @param videoPath
+         * @param validate_data
+         * @param imagePath
+         * @param compare_flag
+         * @return
+         */
+        int LiveDetectFour(rapidjson::Document &result, const std::string &videoPath, const std::string &validate_data, const std::string &imagePath, bool compare_flag = 1);
+
+        /**
+         * @brief IdCardLiveDetectFour
+         * @param result
+         * @param videoPath
+         * @param validate_data
+         * @param id
+         * @param name
+         * @return
+         */
+        int IdCardLiveDetectFour(rapidjson::Document &result, const std::string &videoPath, const std::string &validate_data, const std::string &id, const std::string &name);
+
+        /**
+         * @brief IdCardFaceCompare
+         * @param result
+         * @param id
+         * @param name
+         * @param imagePath
+         * @param data_type
+         * @return
+         */
+        int IdCardFaceCompare(rapidjson::Document &result, const std::string &id, const std::string &name, const std::string &imagePath, int data_type = 0);
+
     private:
         int curl_method(const std::string& addr, const std::string &req_str, std::string &rsp_str);
         
     private:
         static std::string host_tencentyun;
         static std::string host_youtu;
+        static std::string host_face_in_youtu;
         std::string host;
         AppSign app_sign;
         std::string app_id;
