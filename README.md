@@ -50,9 +50,9 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
     ytopen_sdk m_sdk;
     //优图开放平台初始化 
     m_sdk.Init(m_app_sign, ytopen_sdk::API_YOUTU_END_POINT);
-    //腾讯云初始化方式
-    m_sdk.Init(m_app_sign, ytopen_sdk::API_FACE_IN_YOUTU_END_POINT);
     //优图开放平台核身服务初始化
+    m_sdk.Init(m_app_sign, ytopen_sdk::API_FACE_IN_YOUTU_END_POINT);
+    //腾讯云初始化方式
     m_sdk.Init(m_app_sign, ytopen_sdk::API_TENCENTYUN_END_POINT);
     
 
