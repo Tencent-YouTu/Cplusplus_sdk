@@ -48,7 +48,13 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
     };
 
     ytopen_sdk m_sdk;
-    m_sdk.Init(m_app_sign);
+    //优图开放平台初始化 
+    m_sdk.Init(m_app_sign, ytopen_sdk::API_YOUTU_END_POINT);
+    //腾讯云初始化方式
+    m_sdk.Init(m_app_sign, ytopen_sdk::API_FACE_IN_YOUTU_END_POINT);
+    //优图开放平台核身服务初始化
+    m_sdk.Init(m_app_sign, ytopen_sdk::API_TENCENTYUN_END_POINT);
+    
 
     rapidjson::Document result;
     if(0 != m_sdk.DetectFace(result, "a.jpg"))
@@ -231,7 +237,7 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 - 参数
 	- `videoPath` 视频的路径
 	- `validate_data` LiveGetFour获取的四字唇语
-	- `imagePath_data` 对比照片的路劲
+	- `imagePath_data` 对比照片的路径
 	- `compare_flag`  视频与照片是否进行对比，1 对比 0不对比
 
 ###不带数据源四字人脸核身
@@ -242,16 +248,6 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 	- `validate_data` LiveGetFour获取的四字唇语
 	- `id` 身份证号码
 	- `name`  身份证姓名
-
-###不带数据源四字人脸核身
-- 接口
-`int IdCardLiveDetectFour(rapidjson::Document &result, const std::string &videoPath, const std::string &validate_data, const std::string &id, const std::string &name);`
-- 参数
-	- `videoPath` 视频的路径
-	- `validate_data` LiveGetFour获取的四字唇语
-	- `id` 身份证号码
-	- `name`  身份证姓名
-
 
 ###不带数据源人脸对比
 - 接口
