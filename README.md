@@ -50,8 +50,10 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
     ytopen_sdk m_sdk;
     //优图开放平台初始化 
     m_sdk.Init(m_app_sign, ytopen_sdk::API_YOUTU_END_POINT);
-    //优图开放平台核身服务初始化
+
+    //优图开放平台核身服务初始化（核身服务目前仅支持核身专有接口,需要联系商务开通）
     m_sdk.Init(m_app_sign, ytopen_sdk::API_FACE_IN_YOUTU_END_POINT);
+
     //腾讯云初始化方式
     m_sdk.Init(m_app_sign, ytopen_sdk::API_TENCENTYUN_END_POINT);
     
@@ -89,6 +91,9 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 - 返回值
 	- `0` 成功
 	- `-1` 失败，原因可能为秘钥鉴权失败、参数不合法等
+
+
+##开放平台API介绍
 
 ###人脸检测
 - 接口
@@ -225,6 +230,22 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 - 参数
 	- `retimage` 是否需要返回处理结果图，true返回，false不返回
 
+
+##核身API介绍（核身服务目前仅支持核身专有接口,需要联系商务开通）
+
+###身份证OCR
+- 接口
+`int IdcardOcr(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, int card_type = 0);`
+- 参数
+	- `card_type ` 身份证照片类型 0 正面 1 反面
+
+###人脸比对
+- 接口
+`int FaceCompare(rapidjson::Document &result, const std::string& imagePathA, const std::string&imagePathB, int data_type = 0);`
+- 参数
+	- `imagePathA` 待比对的A图片路径
+	- `imagePathB` 待比对的B图片路径
+
 ###获取四字唇语 
 - 接口
 `int LiveGetFour(rapidjson::Document &result);`
@@ -240,6 +261,7 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 	- `imagePath_data` 对比照片的路径
 	- `compare_flag`  视频与照片是否进行对比，1 对比 0不对比
 
+
 ###不带数据源四字人脸核身
 - 接口
 `int IdCardLiveDetectFour(rapidjson::Document &result, const std::string &videoPath, const std::string &validate_data, const std::string &id, const std::string &name);`
@@ -248,6 +270,7 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 	- `validate_data` LiveGetFour获取的四字唇语
 	- `id` 身份证号码
 	- `name`  身份证姓名
+
 
 ###不带数据源人脸对比
 - 接口

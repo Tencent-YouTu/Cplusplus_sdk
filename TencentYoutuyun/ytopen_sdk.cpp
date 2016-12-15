@@ -1048,7 +1048,7 @@ int ytopen_sdk::LiveGetFour(rapidjson::Document &result)
     return 0;
 }
 
-int ytopen_sdk::LiveDetectFour(rapidjson::Document &result, const std::string &videoPath, const std::string &validate_data, const std::string &imagePath, bool compare_flag = 1)
+int ytopen_sdk::LiveDetectFour(rapidjson::Document &result, const std::string &videoPath, const std::string &validate_data, const std::string &imagePath, bool compare_flag )
 {
     std::stringstream ss;
     ss<<host<<"/youtu/openliveapi/livedetectfour";
@@ -1177,7 +1177,7 @@ int ytopen_sdk::IdCardLiveDetectFour(rapidjson::Document &result, const std::str
     return 0;
 }
 
-int ytopen_sdk::IdCardFaceCompare(rapidjson::Document &result, const std::string &id, const std::string &name, const std::string &imagePath, int data_type = 0)
+int ytopen_sdk::IdCardFaceCompare(rapidjson::Document &result, const std::string &id, const std::string &name, const std::string &imagePath, int data_type )
 {
     result.SetNull();
     std::stringstream ss;
