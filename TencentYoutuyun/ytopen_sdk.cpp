@@ -1236,6 +1236,50 @@ int ytopen_sdk::IdCardFaceCompare(rapidjson::Document &result, const std::string
     return 0;
 }
 
+int ytopen_sdk::ValidateIdCard(rapidjson::Document &result, const std::string &id, const std::string &name)
+{
+    result.SetNull();
+    std::stringstream ss;
+    ss<<host<<"/youtu/openliveapi/validateidcard";
+
+    if (id.empty() || name.empty())
+    {
+        cout << "id or name is empty "  << endl;
+        return -1;
+    }
+
+    string addr;
+    addr.assign(ss.str());
+
+    string req;
+    string rsp;
+
+    StringBuffer sbuffer;
+    Writer<StringBuffer> writer(sbuffer);
+
+    writer.StartObject();
+    writer.String("app_id"); writer.String(app_id.c_str());
+    writer.String("idcard_number"); writer.String(id.c_str());
+    writer.String("idcard_name"); writer.String(name.c_str());
+
+    writer.EndObject();
+
+    req = sbuffer.GetString();
+    int ret = curl_method(addr, req, rsp);
+    if(ret == 0) {
+        result.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(result.HasParseError()) {
+            std::cout << "RapidJson parse error " << result.GetParseError() << endl;
+            return -1;
+        }
+
+    }else {
+        return -1;
+    }
+
+    return 0;
+}
+
 int writer(char *data, size_t size, size_t nmemb, std::string *writerData)
 {
      int len = size*nmemb;

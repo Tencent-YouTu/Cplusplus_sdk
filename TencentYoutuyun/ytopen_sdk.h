@@ -280,6 +280,15 @@ class ytopen_sdk
          */
         int IdCardFaceCompare(rapidjson::Document &result, const std::string &id, const std::string &name, const std::string &imagePath, int data_type = 0);
 
+        /**
+         * @brief IdCardFaceCompare
+         * @param result
+         * @param id
+         * @param name
+         * @return
+         */
+        int ValidateIdCard(rapidjson::Document &result, const std::string &id, const std::string &name);
+
     private:
         int curl_method(const std::string& addr, const std::string &req_str, std::string &rsp_str);
         

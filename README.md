@@ -280,6 +280,13 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 	- `name`  身份证姓名
 	- `imagePath` 照片的路径
 	- `data_type` 0代表本地照片，1代表url
+
+###实名认证
+- 接口
+`int ValidateIdCard(rapidjson::Document &result, const std::string &id, const std::string &name);`
+- 参数
+	- `id` 身份证号码
+	- `name`  身份证姓名
 ```
 ```
 更多详情和文档说明参见
