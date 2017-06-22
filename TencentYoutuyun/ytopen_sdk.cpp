@@ -1360,3 +1360,157 @@ int ytopen_sdk::curl_method(const string &addr, const string &req_str, string &r
     return 0;
 }
 
+
+int ytopen_sdk::GeneralOcr(rapidjson::Document &result, const string &imagePath, int data_type)
+{
+    result.SetNull();
+
+    string imageData;
+    if(data_type==0 && 0!=read_image(imagePath, imageData))
+    {
+        cout << "image read failed. " << imagePath <<endl;
+        return -1;
+    }
+
+    std::stringstream ss;
+    ss << host << "/youtu/ocrapi/generalocr";
+
+    string addr;
+    addr.assign(ss.str());
+
+    string req, rsp;
+
+    StringBuffer sbuffer;
+    Writer<StringBuffer> writer(sbuffer);
+
+    writer.StartObject();
+    writer.String("app_id");
+    writer.String(app_id.c_str());
+    if(data_type == 0){
+        string encode_data = b64_encode(imageData);
+        writer.String("image");
+        writer.String(encode_data.c_str());
+    }else {
+        writer.String("url");
+        writer.String(imagePath.c_str());
+    }
+    
+    writer.EndObject();
+
+    req = sbuffer.GetString();
+    int ret = curl_method(addr, req, rsp);
+
+    if(ret == 0) {
+        result.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(result.HasParseError()) {
+            std::cout << "PapidJson parse error" << result.GetParseError() << std::endl;
+        }
+    }else {
+        return -1;
+    }
+
+    return 0;
+}
+
+int ytopen_sdk::BcOcr(rapidjson::Document &result, const string &imagePath, int data_type)
+{
+    result.SetNull();
+
+    string imageData;
+    if(data_type==0 && 0!=read_image(imagePath, imageData))
+    {
+        cout << "image read failed. " << imagePath <<endl;
+        return -1;
+    }
+
+    std::stringstream ss;
+    ss << host << "/youtu/ocrapi/bcocr";
+
+    string addr;
+    addr.assign(ss.str());
+
+    string req, rsp;
+
+    StringBuffer sbuffer;
+    Writer<StringBuffer> writer(sbuffer);
+
+    writer.StartObject();
+    writer.String("app_id");
+    writer.String(app_id.c_str());
+    if(data_type == 0){
+        string encode_data = b64_encode(imageData);
+        writer.String("image");
+        writer.String(encode_data.c_str());
+    }else {
+        writer.String("url");
+        writer.String(imagePath.c_str());
+    }
+    
+    writer.EndObject();
+
+    req = sbuffer.GetString();
+    int ret = curl_method(addr, req, rsp);
+
+    if(ret == 0) {
+        result.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(result.HasParseError()) {
+            std::cout << "PapidJson parse error" << result.GetParseError() << std::endl;
+        }
+    }else {
+        return -1;
+    }
+
+    return 0;
+}
+
+
+int ytopen_sdk::DriverLicenseOcr(rapidjson::Document &result, const string &imagePath, int data_type)
+{
+    result.SetNull();
+
+    string imageData;
+    if(data_type==0 && 0!=read_image(imagePath, imageData))
+    {
+        cout << "image read failed. " << imagePath <<endl;
+        return -1;
+    }
+
+    std::stringstream ss;
+    ss << host << "/youtu/ocrapi/driverlicenseocr";
+
+    string addr;
+    addr.assign(ss.str());
+
+    string req, rsp;
+
+    StringBuffer sbuffer;
+    Writer<StringBuffer> writer(sbuffer);
+
+    writer.StartObject();
+    writer.String("app_id");
+    writer.String(app_id.c_str());
+    if(data_type == 0){
+        string encode_data = b64_encode(imageData);
+        writer.String("image");
+        writer.String(encode_data.c_str());
+    }else {
+        writer.String("url");
+        writer.String(imagePath.c_str());
+    }
+    
+    writer.EndObject();
+
+    req = sbuffer.GetString();
+    int ret = curl_method(addr, req, rsp);
+
+    if(ret == 0) {
+        result.Parse<rapidjson::kParseStopWhenDoneFlag>(rsp.c_str());
+        if(result.HasParseError()) {
+            std::cout << "PapidJson parse error" << result.GetParseError() << std::endl;
+        }
+    }else {
+        return -1;
+    }
+
+    return 0;
+}

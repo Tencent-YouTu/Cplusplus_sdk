@@ -289,6 +289,34 @@ class ytopen_sdk
          */
         int ValidateIdCard(rapidjson::Document &result, const std::string &id, const std::string &name);
 
+        
+        /**
+         * @brief GeneralOcr 
+         * @param result
+         * @param imagePath
+         * @return
+         */
+        int GeneralOcr(rapidjson::Document &result, const std::string &imagePath, int data_type=0);
+
+
+        /**
+         * @brief BcOcr 
+         * @param result
+         * @param imagePath
+         * @return
+         */
+        int BcOcr(rapidjson::Document &result, const std::string &imagePath, int data_type=0);
+
+
+        /**
+         * @brief DriverLicenseOcr 
+         * @param result
+         * @param imagePath
+         * @return
+         */
+        int DriverLicenseOcr(rapidjson::Document &result, const std::string &imagePath, int data_type=0);
+
+
     private:
         int curl_method(const std::string& addr, const std::string &req_str, std::string &rsp_str);
         
