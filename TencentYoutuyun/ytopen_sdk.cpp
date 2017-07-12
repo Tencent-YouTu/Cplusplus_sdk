@@ -1464,7 +1464,7 @@ int ytopen_sdk::BcOcr(rapidjson::Document &result, const string &imagePath, int 
 }
 
 
-int ytopen_sdk::DriverLicenseOcr(rapidjson::Document &result, const string &imagePath, int data_type)
+int ytopen_sdk::DriverLicenseOcr(rapidjson::Document &result, const string &imagePath, int data_type, int card_type)
 {
     result.SetNull();
 
@@ -1497,6 +1497,8 @@ int ytopen_sdk::DriverLicenseOcr(rapidjson::Document &result, const string &imag
         writer.String("url");
         writer.String(imagePath.c_str());
     }
+
+    writer.String("type"); writer.Int(card_type);
     
     writer.EndObject();
 
