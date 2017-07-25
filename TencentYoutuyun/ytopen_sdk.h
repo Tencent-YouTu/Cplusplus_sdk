@@ -292,8 +292,9 @@ class ytopen_sdk
         
         /**
          * @brief GeneralOcr 
-         * @param result
-         * @param imagePath
+         * @param result    Json格式的请求结果
+         * @param imagePath 图片本地路径／url
+         * @param data_type 图片数据类型 本地路径／url 0／1 
          * @return
          */
         int GeneralOcr(rapidjson::Document &result, const std::string &imagePath, int data_type=0);
@@ -301,8 +302,9 @@ class ytopen_sdk
 
         /**
          * @brief BcOcr 
-         * @param result
-         * @param imagePath
+         * @param result    Json格式的请求结果
+         * @param imagePath 图片本地路径／url
+         * @param data_type 图片数据类型 本地路径／url 0／1 
          * @return
          */
         int BcOcr(rapidjson::Document &result, const std::string &imagePath, int data_type=0);
@@ -310,8 +312,10 @@ class ytopen_sdk
 
         /**
          * @brief DriverLicenseOcr 
-         * @param result
-         * @param imagePath
+         * @param result    Json格式的请求结果
+         * @param imagePath 图片本地路径／url
+         * @param data_type 图片数据类型 本地路径／url 0／1 
+         * @param card_type 图片类型:行驶证/驾驶证 0/1
          * @return
          */
         int DriverLicenseOcr(rapidjson::Document &result, const std::string &imagePath, int data_type=0, int card_type=0);
