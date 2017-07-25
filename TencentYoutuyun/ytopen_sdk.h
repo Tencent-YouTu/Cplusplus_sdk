@@ -314,7 +314,7 @@ class ytopen_sdk
          * @param imagePath
          * @return
          */
-        int DriverLicenseOcr(rapidjson::Document &result, const std::string &imagePath, int data_type=0);
+        int DriverLicenseOcr(rapidjson::Document &result, const std::string &imagePath, int data_type=0, int card_type=0);
 
 
     private:
