@@ -230,6 +230,25 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 - 参数
 	- `retimage` 是否需要返回处理结果图，true返回，false不返回
 
+###通用OCR
+- 接口
+`int GeneralOcr(rapidjson::Document &result, const std::string &imagePath, int data_type = 0);`
+- 参数
+	- `imagePath ` 待检测图片路径
+
+###名片OCR
+- 接口
+`int BcOcr(rapidjson::Document &result, const std::string &imagePath, int data_type = 0);`
+- 参数
+	- `imagePath ` 待检测图片路径
+
+###行驶证&驾驶证OCR
+- 接口
+`int DriverLicenseOcr(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, int card_type = 0);`
+- 参数
+	- `imagePath ` 待检测图片路径
+	- `card_type ` 照片类型 0 行驶证  1 驾驶证
+
 
 ##核身API介绍（核身服务目前仅支持核身专有接口,需要联系商务开通）
 
