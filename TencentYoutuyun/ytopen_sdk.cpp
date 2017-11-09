@@ -1314,22 +1314,19 @@ int ytopen_sdk::curl_method(const string &addr, const string &req_str, string &r
         headers = curl_slist_append(headers, "Expect: ");
 
         //produce the sign for Authorization.
-        char *sign = NULL;
+        std::string sign;
 
         //get current time(s), add by 1000s as the expired time.
         time_t t;
         uint64_t cur_time = time(&t);
         qc_app_sign(app_sign.app_id, 
-                    app_sign.secret_id.c_str(), 
-                    app_sign.secret_key.c_str(), 
+                    app_sign.secret_id, 
+                    app_sign.secret_key, 
                     2592000 + cur_time,
-                    app_sign.user_id.c_str(), 
+                    app_sign.user_id, 
                     sign);
 
-        string authstr = "Authorization: "+ string(sign);
-        if(sign) {
-            delete sign;
-        }
+        string authstr = "Authorization: " + sign;
 
         headers = curl_slist_append(headers, authstr.c_str());
 
