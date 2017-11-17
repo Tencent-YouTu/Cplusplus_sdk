@@ -232,16 +232,6 @@ class ytopen_sdk
         int IdcardOcr(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, int card_type = 0);
 
         /**
-         * @brief NamecardOcr
-         * @param result
-         * @param imagePath
-         * @param data_type
-         * @param card_type
-         * @return
-         */
-        int NamecardOcr(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, bool retImage = 0);
-
-        /**
          * @brief LiveGetFour
          * @param result
          */

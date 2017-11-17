@@ -224,12 +224,6 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 - 参数
 	- `card_type ` 身份证照片类型 0 正面 1 反面
 
-###名片OCR
-- 接口
-`int NamecardOcr(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, bool retImage = 0);`
-- 参数
-	- `retimage` 是否需要返回处理结果图，true返回，false不返回
-
 ###通用OCR
 - 接口
 `int GeneralOcr(rapidjson::Document &result, const std::string &imagePath, int data_type = 0);`
