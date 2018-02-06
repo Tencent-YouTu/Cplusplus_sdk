@@ -26,7 +26,6 @@ class ytopen_sdk
         enum Domain
         {
             API_YOUTU_END_POINT = 0,
-            API_TENCENTYUN_END_POINT = 1,
             API_FACE_IN_YOUTU_END_POINT = 2
         };
 
@@ -35,7 +34,7 @@ class ytopen_sdk
         /**
          * @brief Init
          * @param t_app_sign 密钥身份信息
-         * @param domain 服务的域名地址，优图／腾讯云（默认优图）
+         * @param domain 服务的域名地址
          */
 
         void Init(const AppSign& t_app_sign, Domain domain = API_YOUTU_END_POINT);
@@ -315,7 +314,6 @@ class ytopen_sdk
         int curl_method(const std::string& addr, const std::string &req_str, std::string &rsp_str);
         
     private:
-        static std::string host_tencentyun;
         static std::string host_youtu;
         static std::string host_face_in_youtu;
         std::string host;
