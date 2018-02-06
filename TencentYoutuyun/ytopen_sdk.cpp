@@ -5,7 +5,6 @@ using namespace std;
 using namespace rapidjson;
 
 string ytopen_sdk::host_youtu = "https://api.youtu.qq.com";
-string ytopen_sdk::host_tencentyun = "https://youtu.api.qcloud.com";
 string ytopen_sdk::host_face_in_youtu = "https://vip-api.youtu.qq.com";
 
 //a must,curl global init, ugly but it works.
@@ -58,8 +57,6 @@ void ytopen_sdk::Init(const AppSign& t_app_sign, Domain domain)
     } else if (domain == API_FACE_IN_YOUTU_END_POINT)
     {
         host = host_face_in_youtu;
-    }else {
-        host = host_tencentyun;
     }
 }
 
