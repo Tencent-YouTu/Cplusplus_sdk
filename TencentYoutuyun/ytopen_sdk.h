@@ -90,6 +90,19 @@ class ytopen_sdk
         int FaceIdentify(rapidjson::Document &result, const std::string& group_id, const std::string& imagePath, int data_type = 0);
 
         /**
+         * @brief MultiFaceIdentify
+         * @param result Json格式的请求结果
+         * @param group_id 识别的组id
+         * @param group_ids 识别的个体存放的组id，可以指定多个组id，用户指定（组默认创建）
+         * @param imagePath 待识别的图片本地路径／url
+         * @param data_type 图片数据类型 图片本地路径／url 0／1
+         * @param topn 候选人脸数量，一般使用默认值5
+         * @param min_size 人脸检测最小尺寸，一般使用默认值40
+         * @return 0成功 -1失败
+         */
+        int MultiFaceIdentify(rapidjson::Document &result, const std::string& group_id, const std::vector<std::string> &group_ids, const std::string& imagePath, int data_type = 0, int topn = 5, int min_size = 40);
+
+        /**
          * @brief NewPerson
          * @param result Json格式的请求结果
          * @param person_id 新建的个体id，用户指定，需要保证app_id下的唯一性
@@ -211,14 +224,34 @@ class ytopen_sdk
         int ImageTag(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, const std::string &cookie = "");
 
         /**
-         * @brief ImagePorn
-         * @param result
-         * @param imagePath
-         * @param data_type
+         * @brief ImagePorn 图片鉴黄
+         * @param result Json格式的请求结果
+         * @param imagePath 图片本地路径／url
+         * @param data_type 图片数据类型 本地路径／url 0／1
          * @param cookie
-         * @return
+         * @return 0成功 -1失败
          */
         int ImagePorn(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, const std::string &cookie = "");
+
+        /**
+         * @brief ImageTerrorism 图片暴恐检测
+         * @param result Json格式的请求结果
+         * @param imagePath 图片本地路径／url
+         * @param data_type 图片数据类型 本地路径／url 0／1
+         * @param cookie
+         * @return 0成功 -1失败
+         */
+        int ImageTerrorism(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, const std::string &cookie = "");
+
+        /**
+         * @brief CarClassify 车辆属性识别
+         * @param result Json格式的请求结果
+         * @param imagePath 图片本地路径／url
+         * @param data_type 图片数据类型 本地路径／url 0／1
+         * @param cookie
+         * @return 0成功 -1失败
+         */
+        int CarClassify(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, const std::string &cookie = "");
 
         /**
          * @brief IdcardOcr 身份证OCR识别
@@ -308,6 +341,33 @@ class ytopen_sdk
          * @return
          */
         int DriverLicenseOcr(rapidjson::Document &result, const std::string &imagePath, int data_type=0, int card_type=0);
+
+        /**
+         * @brief CreditCardOcr
+         * @param result    Json格式的请求结果
+         * @param imagePath 图片本地路径／url
+         * @param data_type 图片数据类型 本地路径／url 0／1
+         * @return
+         */
+        int CreditCardOcr(rapidjson::Document &result, const std::string &imagePath, int data_type = 0);
+
+        /**
+         * @brief BizLicenseOcr
+         * @param result    Json格式的请求结果
+         * @param imagePath 图片本地路径／url
+         * @param data_type 图片数据类型 本地路径／url 0／1
+         * @return
+         */
+        int BizLicenseOcr(rapidjson::Document &result, const std::string &imagePath, int data_type = 0);
+
+        /**
+         * @brief PlateOcr
+         * @param result    Json格式的请求结果
+         * @param imagePath 图片本地路径／url
+         * @param data_type 图片数据类型 本地路径／url 0／1
+         * @return
+         */
+        int PlateOcr(rapidjson::Document &result, const std::string &imagePath, int data_type=0);
 
 
     private:

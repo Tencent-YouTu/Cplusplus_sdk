@@ -1,6 +1,6 @@
 # tencentyun-youtu
 
-c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html) & [腾讯优图开放平台](open.youtu.qq.com)
+c++ sdk for [腾讯优图开放平台](http:/open.youtu.qq.com)
 
 ## 安装
 ####运行环境
@@ -120,6 +120,15 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 - 参数
 	- `person_id` 待验证的人脸id
 
+###多人脸检索
+- 接口
+` int MultiFaceIdentify(rapidjson::Document &result, const std::string& group_id, const std::vector<std::string> &group_ids, const std::string& imagePath, int data_type = 0, int topn = 5, int min_size = 40);`
+- 参数
+	- `group_id` 识别的组id
+	- `group_ids` 识别的个体存放的组id，可以指定多个组id，用户指定
+	- `topn` 候选人脸数量，一般使用默认值5
+	- `min_size` 人脸检测最小尺寸，一般使用默认值40
+
 ###人脸识别
 - 接口
 `int FaceIdentify(rapidjson::Document &result, const std::string& group_id, const std::string& imagePath, int data_type = 0);`
@@ -218,6 +227,18 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 - 参数
 	- `cookie ` 下载图片url的cookie
 
+###暴恐图片识别
+- 接口
+`int ImageTerrorism(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, const std::string &cookie = "");`
+- 参数
+	- `cookie ` 下载图片url的cookie
+
+###车辆属性识别
+- 接口
+`int CarClassify(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, const std::string &cookie = "");`
+- 参数
+	- `cookie ` 下载图片url的cookie
+
 ###身份证OCR
 - 接口
 `int IdcardOcr(rapidjson::Document &result, const std::string &imagePath, int data_type = 0, int card_type = 0);`
@@ -242,6 +263,24 @@ c++ sdk for [腾讯云智能优图服务](http://www.qcloud.com/product/fr.html)
 - 参数
 	- `imagePath ` 待检测图片路径
 	- `card_type ` 照片类型 0 行驶证  1 驾驶证
+
+###银行卡OCR识别
+- 接口
+`int CreditCardOcr(rapidjson::Document &result, const std::string &imagePath, int data_type = 0);`
+- 参数
+	- `imagePath ` 待检测图片路径
+
+###营业执照OCR识别
+- 接口
+`int BizLicenseOcr(rapidjson::Document &result, const std::string &imagePath, int data_type = 0);`
+- 参数
+	- `imagePath ` 待检测图片路径
+	
+###车牌OCR识别
+- 接口
+`int PlateOcr(rapidjson::Document &result, const std::string &imagePath, int data_type = 0);`
+- 参数
+	- `imagePath ` 待检测图片路径
 
 
 ##核身API介绍（核身服务目前仅支持核身专有接口,需要联系商务开通）
